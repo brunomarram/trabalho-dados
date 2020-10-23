@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  runner:
+    # build: . # Caso queira personalizar o Dockerfile.
+    image: gfviegas/cdd # Se usar a opção build, comente esta.
+    container_name: trabalho-dados
+    working_dir: /code
+    volumes:
+      - ./:/code
+    ports:
+      - 8888:8888
