@@ -3,5 +3,8 @@ jupyterlab
 pandas
 numpy
 matplotlib
+# sklearn
 jupyterthemes
 pylint
+xlrd
+# Mlxtend
