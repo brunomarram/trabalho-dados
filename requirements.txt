@@ -1,3 +1,7 @@
 jupyter
+jupyterlab
 pandas
 numpy
+matplotlib
+jupyterthemes
+pylint
