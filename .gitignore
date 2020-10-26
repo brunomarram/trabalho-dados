@@ -5,3 +5,4 @@
 !src/example.ipynb
 AmbienteTP/
 .vscode/
+.~lock.*
