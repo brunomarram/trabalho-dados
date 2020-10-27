@@ -16770,7 +16770,7 @@ div#notebook {
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Percorre as colunas selecionadas do DF e converte os valores numéricos na notação BR para o padrão float</span>
 
-<span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">converter_dados_numericos_notacao_brasileira_para_float</span><span class="p">)</span> <span class="c1"># Também funciona com .loc, a diferença é que requer os nomes da colunas.</span>
+<span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">converter_dados_numericos_notacao_brasileira_para_float</span><span class="p">)</span> <span class="c1"># Também funciona com .loc, a diferença é que requer os nomes da colunas.</span>
 </pre></div>
 
     </div>
@@ -16785,7 +16785,7 @@ div#notebook {
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Faz o casting nas colunas selecionadas do DF para float</span>
 
-<span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span> <span class="c1"># Também funciona com .loc, a diferença é que requer os nomes da colunas.</span>
+<span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span> <span class="c1"># Também funciona com .loc, a diferença é que requer os nomes da colunas.</span>
 </pre></div>
 
     </div>
@@ -16856,7 +16856,7 @@ div#notebook {
       <td>965.76</td>
       <td>1183.04</td>
       <td>1511.11</td>
-      <td>2111,32</td>
+      <td>2111.32</td>
     </tr>
     <tr>
       <th>1</th>
@@ -16868,7 +16868,7 @@ div#notebook {
       <td>562.13</td>
       <td>664.21</td>
       <td>784.44</td>
-      <td>1013,62</td>
+      <td>1013.62</td>
     </tr>
     <tr>
       <th>2</th>
@@ -16880,7 +16880,7 @@ div#notebook {
       <td>22.86</td>
       <td>22.67</td>
       <td>33.65</td>
-      <td>30,67</td>
+      <td>30.67</td>
     </tr>
     <tr>
       <th>3</th>
@@ -16892,7 +16892,7 @@ div#notebook {
       <td>13.85</td>
       <td>12.66</td>
       <td>14.22</td>
-      <td>12,00</td>
+      <td>12.00</td>
     </tr>
     <tr>
       <th>4</th>
@@ -16904,7 +16904,7 @@ div#notebook {
       <td>5.13</td>
       <td>5.31</td>
       <td>3.99</td>
-      <td>6,16</td>
+      <td>6.16</td>
     </tr>
     <tr>
       <th>...</th>
@@ -16928,7 +16928,7 @@ div#notebook {
       <td>15.13</td>
       <td>14.46</td>
       <td>9.64</td>
-      <td>16,72</td>
+      <td>16.72</td>
     </tr>
     <tr>
       <th>82</th>
@@ -16940,7 +16940,7 @@ div#notebook {
       <td>0.15</td>
       <td>0.00</td>
       <td>-1.00</td>
-      <td>0,51</td>
+      <td>0.51</td>
     </tr>
     <tr>
       <th>83</th>
@@ -16952,7 +16952,7 @@ div#notebook {
       <td>67.03</td>
       <td>38.61</td>
       <td>47.58</td>
-      <td>35,43</td>
+      <td>35.43</td>
     </tr>
     <tr>
       <th>84</th>
@@ -16964,7 +16964,7 @@ div#notebook {
       <td>1092145.00</td>
       <td>384637.00</td>
       <td>207088.00</td>
-      <td>123662</td>
+      <td>123662.00</td>
     </tr>
     <tr>
       <th>85</th>
@@ -16976,7 +16976,7 @@ div#notebook {
       <td>3.48</td>
       <td>3.11</td>
       <td>2.93</td>
-      <td>3,02</td>
+      <td>3.02</td>
     </tr>
   </tbody>
 </table>
@@ -17330,7 +17330,7 @@ div#notebook {
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Percorre as colunas selecionadas do DF e converte os valores numéricos na notação BR para o padrão float</span>
 
-<span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">converter_dados_numericos_notacao_brasileira_para_float</span><span class="p">)</span> <span class="c1"># Também funciona com .loc, a diferença é que requer os nomes da colunas.</span>
+<span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">converter_dados_numericos_notacao_brasileira_para_float</span><span class="p">)</span> <span class="c1"># Também funciona com .loc, a diferença é que requer os nomes da colunas.</span>
 </pre></div>
 
     </div>
@@ -17345,7 +17345,7 @@ div#notebook {
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Faz o casting nas colunas do DF para float</span>
 
-<span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span> <span class="c1"># Também funciona com .loc, a diferença é que requer os nomes da colunas.</span>
+<span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span> <span class="c1"># Também funciona com .loc, a diferença é que requer os nomes da colunas.</span>
 </pre></div>
 
     </div>
@@ -17416,7 +17416,7 @@ div#notebook {
       <td>6575.93</td>
       <td>9589.42</td>
       <td>14391.83</td>
-      <td>23.891,78</td>
+      <td>23891.78</td>
     </tr>
     <tr>
       <th>1</th>
@@ -17428,7 +17428,7 @@ div#notebook {
       <td>6027.63</td>
       <td>8811.94</td>
       <td>13263.37</td>
-      <td>20.768,46</td>
+      <td>20768.46</td>
     </tr>
     <tr>
       <th>2</th>
@@ -17440,7 +17440,7 @@ div#notebook {
       <td>5409.91</td>
       <td>7559.27</td>
       <td>10752.93</td>
-      <td>15.961,57</td>
+      <td>15961.57</td>
     </tr>
     <tr>
       <th>3</th>
@@ -17452,7 +17452,7 @@ div#notebook {
       <td>965.76</td>
       <td>1183.04</td>
       <td>1511.11</td>
-      <td>2.111,32</td>
+      <td>2111.32</td>
     </tr>
     <tr>
       <th>4</th>
@@ -17464,7 +17464,7 @@ div#notebook {
       <td>1658.10</td>
       <td>2278.54</td>
       <td>3102.18</td>
-      <td>4.744,36</td>
+      <td>4744.36</td>
     </tr>
     <tr>
       <th>...</th>
@@ -17488,7 +17488,7 @@ div#notebook {
       <td>278.77</td>
       <td>371.04</td>
       <td>561.06</td>
-      <td>650,42</td>
+      <td>650.42</td>
     </tr>
     <tr>
       <th>91</th>
@@ -17500,7 +17500,7 @@ div#notebook {
       <td>181.62</td>
       <td>284.33</td>
       <td>324.54</td>
-      <td>238,06</td>
+      <td>238.06</td>
     </tr>
     <tr>
       <th>92</th>
@@ -17512,7 +17512,7 @@ div#notebook {
       <td>97.15</td>
       <td>86.72</td>
       <td>236.52</td>
-      <td>412,36</td>
+      <td>412.36</td>
     </tr>
     <tr>
       <th>93</th>
@@ -17524,7 +17524,7 @@ div#notebook {
       <td>1092145.00</td>
       <td>384637.00</td>
       <td>207088.00</td>
-      <td>123662</td>
+      <td>123662.00</td>
     </tr>
     <tr>
       <th>94</th>
@@ -17536,7 +17536,7 @@ div#notebook {
       <td>3.48</td>
       <td>3.11</td>
       <td>2.93</td>
-      <td>3,02</td>
+      <td>3.02</td>
     </tr>
   </tbody>
 </table>
