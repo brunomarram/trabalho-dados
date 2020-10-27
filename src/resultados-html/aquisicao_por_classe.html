@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>teste-leitura-2</title>
+<title>aquisicao_por_classe</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -16362,7 +16362,13 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Os dados foram retirados do site do IBGE no seguinte link: </span>
+<span class="c1">#https://www.ibge.gov.br/estatisticas/downloads-estatisticas.html</span>
+
+<span class="c1">#Após retirada dos dados em xlsx, exportamos cada uma das tabelas no formato de csv e limpamos manualmente</span>
+<span class="c1">#os headers. Depois disso, partimos para a leitura dos mesmos, para início da interpretação</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="c1">#import matplotlib.pyplot as plt</span>
 
@@ -16379,13 +16385,13 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">converter_dados_numericos_notacao_brasileira_para_float</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">value</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="n">resultado</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">resultado</span> <span class="o">=</span> <span class="n">resultado</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">resultado</span> <span class="o">=</span> <span class="n">resultado</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">resultado</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">convertToFloat</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">skipComma</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">skipComma</span> <span class="o">==</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]]</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
 </pre></div>
 
     </div>
@@ -16398,10 +16404,126 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">estado</span> <span class="o">=</span> <span class="s2">&quot;MG&quot;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Testando primeiro para planilha total da pasta classe_de_rendimento</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="s1">&#39;dados-limpos/aquisicao_alimentar_por_classe_de_rendimento/total.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">squeeze</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#Remove colunas unamed</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">total</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
+
+<span class="c1">#converte colunas em string para float</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">convertToFloat</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="n">total</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="n">total</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="c1"># as colunas mostram o alimento, e seu consumo em kg baseado na renda das pessoas</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[3]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Alimento</th>
+      <th>Total</th>
+      <th>Até 1 908 (1)</th>
+      <th>Mais de 1 908 a 2 862</th>
+      <th>Mais de 2 862 a 5 724</th>
+      <th>Mais de 5 724 a 9 540</th>
+      <th>Mais de 9 540 a 14 310</th>
+      <th>Mais de 14 310</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Cereais e leguminosas</td>
+      <td>27.76</td>
+      <td>30.50</td>
+      <td>30.09</td>
+      <td>28.19</td>
+      <td>23.59</td>
+      <td>24.99</td>
+      <td>22.25</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Cereais</td>
+      <td>21.20</td>
+      <td>23.36</td>
+      <td>22.98</td>
+      <td>21.75</td>
+      <td>17.78</td>
+      <td>18.88</td>
+      <td>16.47</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Arroz não especificado</td>
+      <td>1.54</td>
+      <td>1.63</td>
+      <td>1.31</td>
+      <td>1.57</td>
+      <td>1.39</td>
+      <td>1.62</td>
+      <td>1.96</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Arroz polido</td>
+      <td>18.22</td>
+      <td>20.48</td>
+      <td>20.28</td>
+      <td>18.80</td>
+      <td>14.87</td>
+      <td>15.57</td>
+      <td>12.40</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Milho em grão</td>
+      <td>0.73</td>
+      <td>0.77</td>
+      <td>0.73</td>
+      <td>0.64</td>
+      <td>0.72</td>
+      <td>0.73</td>
+      <td>1.10</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -16411,90 +16533,21 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">nome_arquivo_alimentacao</span> <span class="o">=</span> <span class="s2">&quot;dados-limpos/aquisicao_alimentar_por_classe_de_rendimento_e_estado/</span><span class="si">%s</span><span class="s2">/dados-limpos/</span><span class="si">%s</span><span class="s2">_alimentacao.csv&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">estado</span><span class="p">,</span> <span class="n">estado</span><span class="p">)</span>
-</pre></div>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Testando também para uma das regiões da pasta classe_de_rendimento</span>
+<span class="n">regiao</span> <span class="o">=</span> <span class="s1">&#39;norte&#39;</span>
 
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dados_alimentacao_estado</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">nome_arquivo_alimentacao</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">squeeze</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="s1">&#39;dados-limpos/aquisicao_alimentar_por_classe_de_rendimento/&#39;</span><span class="o">+</span><span class="n">regiao</span><span class="o">+</span><span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">squeeze</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1">#Remove colunas unamed</span>
-<span class="n">dados_alimentacao_estado</span> <span class="o">=</span> <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
-</pre></div>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
 
-    </div>
-</div>
-</div>
+<span class="c1">#converte colunas em string para float</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">convertToFloat</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="kc">False</span><span class="p">)</span>
 
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">columns</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[6]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>Index([&#39;Tipos de despesa, número e tamanho médio das famílias&#39;,
-       &#39; &#34;Despesa monetária e não monetária média mensal familiar (R$)&#34;&#39;,
-       &#39; &#34;Total&#34;&#39;, &#39; &#34;Até 1908 (2)&#34;&#39;, &#39;Mais de 1908 a 2862&#39;,
-       &#39;Mais de 2862 a 5724&#39;, &#39;Mais de 5724 a 9540&#39;, &#39;Mais de 9540 a 14310&#39;,
-       &#39;Mais de 14310 a 23850&#39;],
-      dtype=&#39;object&#39;)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Removendo espaços em branco e aspas duplas dos nomes das colunas</span>
-
-<span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-<span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">columns</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="c1">#O mesmo pode ser feito com todas as outras planilhas seguindo esse mesmo formato descrito acima</span>
+<span class="c1"># as colunas mostram o alimento, e seu consumo em kg baseado na renda das pessoas</span>
 </pre></div>
 
     </div>
@@ -16507,44 +16560,7 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[8]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>Index([&#39;Tipos de despesa, número e tamanho médio das famílias&#39;,
-       &#39;Despesa monetária e não monetária média mensal familiar (R$)&#39;, &#39;Total&#39;,
-       &#39;Até 1908 (2)&#39;, &#39;Mais de 1908 a 2862&#39;, &#39;Mais de 2862 a 5724&#39;,
-       &#39;Mais de 5724 a 9540&#39;, &#39;Mais de 9540 a 14310&#39;, &#39;Mais de 14310 a 23850&#39;],
-      dtype=&#39;object&#39;)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dados_alimentacao_estado</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[9]:</div>
+    <div class="prompt output_prompt">Out[4]:</div>
 
 
 
@@ -16567,956 +16583,74 @@ div#notebook {
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Tipos de despesa, número e tamanho médio das famílias</th>
-      <th>Despesa monetária e não monetária média mensal familiar (R$)</th>
+      <th>Alimento</th>
       <th>Total</th>
-      <th>Até 1908 (2)</th>
-      <th>Mais de 1908 a 2862</th>
-      <th>Mais de 2862 a 5724</th>
-      <th>Mais de 5724 a 9540</th>
-      <th>Mais de 9540 a 14310</th>
-      <th>Mais de 14310 a 23850</th>
+      <th>Até 1 908 (1)</th>
+      <th>Mais de 1 908 a 2 862</th>
+      <th>Mais de 2 862 a 5 724</th>
+      <th>Mais de 5 724 a 9 540</th>
+      <th>Mais de 9 540 a 14 310</th>
+      <th>Mais de 14 310</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>Despesas com alimentação</td>
-      <td>688,51</td>
-      <td>327,38</td>
-      <td>470,26</td>
-      <td>682,91</td>
-      <td>965,76</td>
-      <td>1183,04</td>
-      <td>1511,11</td>
-      <td>2111,32</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Alimentação no domicílio</td>
-      <td>421,18</td>
-      <td>233,71</td>
-      <td>310,48</td>
-      <td>432,82</td>
-      <td>562,13</td>
-      <td>664,21</td>
-      <td>784,44</td>
-      <td>1013,62</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Cereais, leguminosas e oleaginosas</td>
-      <td>22,81</td>
-      <td>21,01</td>
-      <td>20,50</td>
-      <td>23,90</td>
-      <td>22,86</td>
-      <td>22,67</td>
-      <td>33,65</td>
-      <td>30,67</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Arroz</td>
-      <td>14,25</td>
-      <td>13,81</td>
-      <td>13,31</td>
-      <td>15,60</td>
-      <td>13,85</td>
-      <td>12,66</td>
-      <td>14,22</td>
-      <td>12,00</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Feijão</td>
-      <td>5,56</td>
-      <td>5,67</td>
-      <td>5,60</td>
-      <td>5,81</td>
-      <td>5,13</td>
-      <td>5,31</td>
-      <td>3,99</td>
-      <td>6,16</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>81</th>
-      <td>Cervejas, chopes e outras bebidas alcoólicas</td>
-      <td>8,98</td>
-      <td>3,63</td>
-      <td>6,21</td>
-      <td>9,63</td>
-      <td>15,13</td>
-      <td>14,46</td>
-      <td>9,64</td>
-      <td>16,72</td>
-    </tr>
-    <tr>
-      <th>82</th>
-      <td>Alimentação light e diet</td>
-      <td>0,09</td>
-      <td>0,11</td>
-      <td>0,05</td>
-      <td>0,09</td>
-      <td>0,15</td>
-      <td>0,00</td>
-      <td>-</td>
-      <td>0,51</td>
-    </tr>
-    <tr>
-      <th>83</th>
-      <td>Outras</td>
-      <td>47,94</td>
-      <td>29,26</td>
-      <td>48,33</td>
-      <td>51,90</td>
-      <td>67,03</td>
-      <td>38,61</td>
-      <td>47,58</td>
-      <td>35,43</td>
-    </tr>
-    <tr>
-      <th>84</th>
-      <td>Número de famílias</td>
-      <td>7149295</td>
-      <td>1392069</td>
-      <td>1478894</td>
-      <td>2470800</td>
-      <td>1092145</td>
-      <td>384637</td>
-      <td>207088</td>
-      <td>123662</td>
-    </tr>
-    <tr>
-      <th>85</th>
-      <td>Tamanho médio da família</td>
-      <td>2,93</td>
-      <td>2,36</td>
-      <td>2,69</td>
-      <td>3,13</td>
-      <td>3,48</td>
-      <td>3,11</td>
-      <td>2,93</td>
-      <td>3,02</td>
-    </tr>
-  </tbody>
-</table>
-<p>86 rows × 9 columns</p>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Removendo espaços em branco e aspas duplas nos tipos de despesa</span>
-
-<span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-<span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Percorre as colunas selecionadas e converte os valores numéricos na notação BR para o padrão float</span>
-
-<span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">converter_dados_numericos_notacao_brasileira_para_float</span><span class="p">)</span> <span class="c1"># Também funciona com .loc, a diferença é que requer os nomes da colunas.</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Faz o casting nas colunas do DF para float</span>
-
-<span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span> <span class="c1"># Também funciona com .loc, a diferença é que requer os nomes da colunas.</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dados_alimentacao_estado</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[13]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Tipos de despesa, número e tamanho médio das famílias</th>
-      <th>Despesa monetária e não monetária média mensal familiar (R$)</th>
-      <th>Total</th>
-      <th>Até 1908 (2)</th>
-      <th>Mais de 1908 a 2862</th>
-      <th>Mais de 2862 a 5724</th>
-      <th>Mais de 5724 a 9540</th>
-      <th>Mais de 9540 a 14310</th>
-      <th>Mais de 14310 a 23850</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Despesas com alimentação</td>
-      <td>688.51</td>
-      <td>327.38</td>
-      <td>470.26</td>
-      <td>682.91</td>
-      <td>965.76</td>
-      <td>1183.04</td>
-      <td>1511.11</td>
-      <td>2111,32</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Alimentação no domicílio</td>
-      <td>421.18</td>
-      <td>233.71</td>
-      <td>310.48</td>
-      <td>432.82</td>
-      <td>562.13</td>
-      <td>664.21</td>
-      <td>784.44</td>
-      <td>1013,62</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Cereais, leguminosas e oleaginosas</td>
-      <td>22.81</td>
-      <td>21.01</td>
-      <td>20.50</td>
+      <td>Cereais e leguminosas</td>
+      <td>26.64</td>
+      <td>26.77</td>
+      <td>28.14</td>
+      <td>25.79</td>
+      <td>27.03</td>
+      <td>24.22</td>
       <td>23.90</td>
-      <td>22.86</td>
-      <td>22.67</td>
-      <td>33.65</td>
-      <td>30,67</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Arroz</td>
-      <td>14.25</td>
-      <td>13.81</td>
-      <td>13.31</td>
-      <td>15.60</td>
-      <td>13.85</td>
-      <td>12.66</td>
-      <td>14.22</td>
-      <td>12,00</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Feijão</td>
-      <td>5.56</td>
-      <td>5.67</td>
-      <td>5.60</td>
-      <td>5.81</td>
-      <td>5.13</td>
-      <td>5.31</td>
-      <td>3.99</td>
-      <td>6,16</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>81</th>
-      <td>Cervejas, chopes e outras bebidas alcoólicas</td>
-      <td>8.98</td>
-      <td>3.63</td>
-      <td>6.21</td>
-      <td>9.63</td>
-      <td>15.13</td>
-      <td>14.46</td>
-      <td>9.64</td>
-      <td>16,72</td>
-    </tr>
-    <tr>
-      <th>82</th>
-      <td>Alimentação light e diet</td>
-      <td>0.09</td>
-      <td>0.11</td>
-      <td>0.05</td>
-      <td>0.09</td>
-      <td>0.15</td>
-      <td>0.00</td>
-      <td>-1.00</td>
-      <td>0,51</td>
-    </tr>
-    <tr>
-      <th>83</th>
-      <td>Outras</td>
-      <td>47.94</td>
-      <td>29.26</td>
-      <td>48.33</td>
-      <td>51.90</td>
-      <td>67.03</td>
-      <td>38.61</td>
-      <td>47.58</td>
-      <td>35,43</td>
-    </tr>
-    <tr>
-      <th>84</th>
-      <td>Número de famílias</td>
-      <td>7149295.00</td>
-      <td>1392069.00</td>
-      <td>1478894.00</td>
-      <td>2470800.00</td>
-      <td>1092145.00</td>
-      <td>384637.00</td>
-      <td>207088.00</td>
-      <td>123662</td>
-    </tr>
-    <tr>
-      <th>85</th>
-      <td>Tamanho médio da família</td>
-      <td>2.93</td>
-      <td>2.36</td>
-      <td>2.69</td>
-      <td>3.13</td>
-      <td>3.48</td>
-      <td>3.11</td>
-      <td>2.93</td>
-      <td>3,02</td>
-    </tr>
-  </tbody>
-</table>
-<p>86 rows × 9 columns</p>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">nome_arquivo_despesas</span> <span class="o">=</span> <span class="s2">&quot;dados-limpos/aquisicao_alimentar_por_classe_de_rendimento_e_estado/</span><span class="si">%s</span><span class="s2">/dados-limpos/</span><span class="si">%s</span><span class="s2">_tipos_despesas.csv&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">estado</span><span class="p">,</span> <span class="n">estado</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dados_despesas_estado</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">nome_arquivo_despesas</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">squeeze</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="c1">#Remove colunas unamed</span>
-<span class="n">dados_despesas_estado</span> <span class="o">=</span> <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">columns</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[16]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>Index([&#39;Tipos de despesa, número e tamanho médio das famílias&#39;,
-       &#39; &#34;Despesa monetária e não monetária média mensal familiar (R$)&#34;&#39;,
-       &#39; &#34;Total&#34;&#39;, &#39; &#34;Até 1908 (2)&#34;&#39;, &#39;Mais de 1908 a 2862&#39;,
-       &#39;Mais de 2862 a 5724&#39;, &#39;Mais de 5724 a 9540&#39;, &#39;Mais de 9540 a 14310&#39;,
-       &#39;Mais de 14310 a 23850&#39;],
-      dtype=&#39;object&#39;)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Removendo espaços em branco e aspas duplas dos nomes das colunas</span>
-
-<span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-<span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">columns</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[18]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>Index([&#39;Tipos de despesa, número e tamanho médio das famílias&#39;,
-       &#39;Despesa monetária e não monetária média mensal familiar (R$)&#39;, &#39;Total&#39;,
-       &#39;Até 1908 (2)&#39;, &#39;Mais de 1908 a 2862&#39;, &#39;Mais de 2862 a 5724&#39;,
-       &#39;Mais de 5724 a 9540&#39;, &#39;Mais de 9540 a 14310&#39;, &#39;Mais de 14310 a 23850&#39;],
-      dtype=&#39;object&#39;)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dados_despesas_estado</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[19]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Tipos de despesa, número e tamanho médio das famílias</th>
-      <th>Despesa monetária e não monetária média mensal familiar (R$)</th>
-      <th>Total</th>
-      <th>Até 1908 (2)</th>
-      <th>Mais de 1908 a 2862</th>
-      <th>Mais de 2862 a 5724</th>
-      <th>Mais de 5724 a 9540</th>
-      <th>Mais de 9540 a 14310</th>
-      <th>Mais de 14310 a 23850</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Despesa total</td>
-      <td>4.390,72</td>
-      <td>1.501,78</td>
-      <td>2.271,56</td>
-      <td>3.697,32</td>
-      <td>6.575,93</td>
-      <td>9.589,42</td>
-      <td>14.391,83</td>
-      <td>23.891,78</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>Despesas correntes</td>
-      <td>4.082,30</td>
-      <td>1.457,93</td>
-      <td>2.159,63</td>
-      <td>3.510,91</td>
-      <td>6.027,63</td>
-      <td>8.811,94</td>
-      <td>13.263,37</td>
-      <td>20.768,46</td>
+      <td>Cereais</td>
+      <td>21.32</td>
+      <td>21.53</td>
+      <td>22.81</td>
+      <td>20.34</td>
+      <td>21.41</td>
+      <td>19.30</td>
+      <td>19.39</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>Despesas de consumo</td>
-      <td>3.635,92</td>
-      <td>1.392,69</td>
-      <td>2.039,02</td>
-      <td>3.247,30</td>
-      <td>5.409,91</td>
-      <td>7.559,27</td>
-      <td>10.752,93</td>
-      <td>15.961,57</td>
+      <td>Arroz não especificado</td>
+      <td>1.97</td>
+      <td>2.50</td>
+      <td>1.71</td>
+      <td>1.64</td>
+      <td>1.44</td>
+      <td>1.75</td>
+      <td>2.27</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>Alimentação</td>
-      <td>688,51</td>
-      <td>327,38</td>
-      <td>470,26</td>
-      <td>682,91</td>
-      <td>965,76</td>
-      <td>1.183,04</td>
-      <td>1.511,11</td>
-      <td>2.111,32</td>
+      <td>Arroz polido</td>
+      <td>17.94</td>
+      <td>17.84</td>
+      <td>19.64</td>
+      <td>16.94</td>
+      <td>18.65</td>
+      <td>16.48</td>
+      <td>15.87</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>Habitação</td>
-      <td>1.230,81</td>
-      <td>601,35</td>
-      <td>817,04</td>
-      <td>1.148,45</td>
-      <td>1.658,10</td>
-      <td>2.278,54</td>
-      <td>3.102,18</td>
-      <td>4.744,36</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>90</th>
-      <td>Diminuição do passivo</td>
-      <td>143,70</td>
-      <td>30,34</td>
-      <td>59,54</td>
-      <td>102,50</td>
-      <td>278,77</td>
-      <td>371,04</td>
-      <td>561,06</td>
-      <td>650,42</td>
-    </tr>
-    <tr>
-      <th>91</th>
-      <td>Empréstimo</td>
-      <td>97,40</td>
-      <td>25,72</td>
-      <td>46,18</td>
-      <td>76,03</td>
-      <td>181,62</td>
-      <td>284,33</td>
-      <td>324,54</td>
-      <td>238,06</td>
-    </tr>
-    <tr>
-      <th>92</th>
-      <td>Prestação de imóvel</td>
-      <td>46,30</td>
-      <td>4,62</td>
-      <td>13,36</td>
-      <td>26,47</td>
-      <td>97,15</td>
-      <td>86,72</td>
-      <td>236,52</td>
-      <td>412,36</td>
-    </tr>
-    <tr>
-      <th>93</th>
-      <td>Número de famílias</td>
-      <td>7149295</td>
-      <td>1392069</td>
-      <td>1478894</td>
-      <td>2470800</td>
-      <td>1092145</td>
-      <td>384637</td>
-      <td>207088</td>
-      <td>123662</td>
-    </tr>
-    <tr>
-      <th>94</th>
-      <td>Tamanho médio da família</td>
-      <td>2,93</td>
-      <td>2,36</td>
-      <td>2,69</td>
-      <td>3,13</td>
-      <td>3,48</td>
-      <td>3,11</td>
-      <td>2,93</td>
-      <td>3,02</td>
+      <td>Milho em grão</td>
+      <td>0.84</td>
+      <td>0.75</td>
+      <td>1.03</td>
+      <td>0.89</td>
+      <td>0.66</td>
+      <td>0.67</td>
+      <td>0.87</td>
     </tr>
   </tbody>
 </table>
-<p>95 rows × 9 columns</p>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Removendo espaços em branco e aspas duplas nos tipos de despesa</span>
-
-<span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-<span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Percorre as colunas selecionadas e converte os valores numéricos na notação BR para o padrão float</span>
-
-<span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">converter_dados_numericos_notacao_brasileira_para_float</span><span class="p">)</span> <span class="c1"># Também funciona com .loc, a diferença é que requer os nomes da colunas.</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Faz o casting nas colunas do DF para float</span>
-
-<span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span> <span class="c1"># Também funciona com .loc, a diferença é que requer os nomes da colunas.</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dados_despesas_estado</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[23]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Tipos de despesa, número e tamanho médio das famílias</th>
-      <th>Despesa monetária e não monetária média mensal familiar (R$)</th>
-      <th>Total</th>
-      <th>Até 1908 (2)</th>
-      <th>Mais de 1908 a 2862</th>
-      <th>Mais de 2862 a 5724</th>
-      <th>Mais de 5724 a 9540</th>
-      <th>Mais de 9540 a 14310</th>
-      <th>Mais de 14310 a 23850</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Despesa total</td>
-      <td>4390.72</td>
-      <td>1501.78</td>
-      <td>2271.56</td>
-      <td>3697.32</td>
-      <td>6575.93</td>
-      <td>9589.42</td>
-      <td>14391.83</td>
-      <td>23.891,78</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Despesas correntes</td>
-      <td>4082.30</td>
-      <td>1457.93</td>
-      <td>2159.63</td>
-      <td>3510.91</td>
-      <td>6027.63</td>
-      <td>8811.94</td>
-      <td>13263.37</td>
-      <td>20.768,46</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Despesas de consumo</td>
-      <td>3635.92</td>
-      <td>1392.69</td>
-      <td>2039.02</td>
-      <td>3247.30</td>
-      <td>5409.91</td>
-      <td>7559.27</td>
-      <td>10752.93</td>
-      <td>15.961,57</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Alimentação</td>
-      <td>688.51</td>
-      <td>327.38</td>
-      <td>470.26</td>
-      <td>682.91</td>
-      <td>965.76</td>
-      <td>1183.04</td>
-      <td>1511.11</td>
-      <td>2.111,32</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Habitação</td>
-      <td>1230.81</td>
-      <td>601.35</td>
-      <td>817.04</td>
-      <td>1148.45</td>
-      <td>1658.10</td>
-      <td>2278.54</td>
-      <td>3102.18</td>
-      <td>4.744,36</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>90</th>
-      <td>Diminuição do passivo</td>
-      <td>143.70</td>
-      <td>30.34</td>
-      <td>59.54</td>
-      <td>102.50</td>
-      <td>278.77</td>
-      <td>371.04</td>
-      <td>561.06</td>
-      <td>650,42</td>
-    </tr>
-    <tr>
-      <th>91</th>
-      <td>Empréstimo</td>
-      <td>97.40</td>
-      <td>25.72</td>
-      <td>46.18</td>
-      <td>76.03</td>
-      <td>181.62</td>
-      <td>284.33</td>
-      <td>324.54</td>
-      <td>238,06</td>
-    </tr>
-    <tr>
-      <th>92</th>
-      <td>Prestação de imóvel</td>
-      <td>46.30</td>
-      <td>4.62</td>
-      <td>13.36</td>
-      <td>26.47</td>
-      <td>97.15</td>
-      <td>86.72</td>
-      <td>236.52</td>
-      <td>412,36</td>
-    </tr>
-    <tr>
-      <th>93</th>
-      <td>Número de famílias</td>
-      <td>7149295.00</td>
-      <td>1392069.00</td>
-      <td>1478894.00</td>
-      <td>2470800.00</td>
-      <td>1092145.00</td>
-      <td>384637.00</td>
-      <td>207088.00</td>
-      <td>123662</td>
-    </tr>
-    <tr>
-      <th>94</th>
-      <td>Tamanho médio da família</td>
-      <td>2.93</td>
-      <td>2.36</td>
-      <td>2.69</td>
-      <td>3.13</td>
-      <td>3.48</td>
-      <td>3.11</td>
-      <td>2.93</td>
-      <td>3,02</td>
-    </tr>
-  </tbody>
-</table>
-<p>95 rows × 9 columns</p>
 </div>
 </div>
 
