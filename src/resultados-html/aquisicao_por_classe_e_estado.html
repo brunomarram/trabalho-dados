@@ -16362,7 +16362,9 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Os dados selecionados para esta tarefa foram extraídos de planilhas do excel que contêm informações para cada estado do Brasil. Esses dados brutos se encontram no diretório: dados-ibge/tabelas_unidades_da_federacao_xls_20191108</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Os dados foram retirados do site do IBGE no seguinte link: https://www.ibge.gov.br/estatisticas/downloads-estatisticas.html</span>
+
+<span class="c1"># Os dados selecionados para esta tarefa foram extraídos de planilhas do excel que contêm informações para cada estado do Brasil. Esses dados brutos se encontram no diretório: dados-ibge/tabelas_unidades_da_federacao_xls_20191108</span>
 
 <span class="c1"># Cada estado possui uma tabela com 6 abas, das quais apenas a 1 e a 3 que nos interessa no momento.</span>
 
@@ -16500,7 +16502,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Removendo espaços em branco e aspas duplas dos nomes das colunas</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Removendo aspas duplas e espaços em branco nos nomes das colunas</span>
 
 <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">dados_alimentacao_estado</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -17060,7 +17062,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Removendo aspas duplas e espaços em branco nos tipos de despesas</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Removendo aspas duplas e espaços em branco nos nomes das colunas</span>
 
 <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">dados_despesas_estado</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
