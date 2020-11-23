@@ -39,31 +39,14 @@ def retorna_dataset_com_soma_colunas_classes_sociais(df):
 
     linhas_familia = list(df.index[-2:])
 
-    soma_1908 = df.drop(linhas_familia)[colunas_df[1]]
-    soma_1908 = soma_1908[soma_1908 >= 0].sum()
-
-    soma_2862 = df.drop(linhas_familia)[colunas_df[2]]
-    soma_2862 = soma_2862[soma_2862 >= 0].sum()
-
-    soma_5724 = df.drop(linhas_familia)[colunas_df[3]]
-    soma_5724 = soma_5724[soma_5724 >= 0].sum()
-
-    soma_9540 = df.drop(linhas_familia)[colunas_df[4]]
-    soma_9540 = soma_9540[soma_9540 >= 0].sum()
-
-    soma_14310 = df.drop(linhas_familia)[colunas_df[5]]
-    soma_14310 = soma_14310[soma_14310 >= 0].sum()
-
-    soma_23850 = df.drop(linhas_familia)[colunas_df[6]]
-    soma_23850 = soma_23850[soma_23850 >= 0].sum()
-
     soma_gastos = ["Total gasto por classes"]
-    soma_gastos.append(soma_1908)
-    soma_gastos.append(soma_2862)
-    soma_gastos.append(soma_5724)
-    soma_gastos.append(soma_9540)
-    soma_gastos.append(soma_14310)
-    soma_gastos.append(soma_23850)
+
+    for coluna in colunas_df[1:]:
+
+        soma = df.drop(linhas_familia)[coluna]
+        soma = soma[soma >= 0].sum()
+
+        soma_gastos.append(soma)
 
     nova_linha = pd.DataFrame([soma_gastos], columns=colunas_df, index=[linhas_familia[-1]+1])
 
