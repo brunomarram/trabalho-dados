@@ -106,13 +106,11 @@ def plot_grafico_barras_lista_top_N_itens(df, classe_social, qtd_top_itens, cor)
     df.iloc[lista_top_N[:-1], [0, id_classe_social]].plot(kind='barh', x=colunas_df[0], y=colunas_df[id_classe_social], color=cor)
     plt.show()
 
-def plot_todos_graficos_barras_lista_top_N_itens(df, qtd_top_itens):
+def plot_todos_graficos_barras_lista_top_N_itens(df, qtd_top_itens, cores):
 
     fig, axes = plt.subplots(nrows=6, ncols=1)
 
     colunas_df = retorna_colunas_df(df)
-
-    cores = ["green", "yellow", "orange", "red", "blue", "purple"]
 
     for i, coluna in enumerate(colunas_df[1:]):
 
