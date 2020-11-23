@@ -2,6 +2,18 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+def get_df_estado(estado):
+    #realiza tratamento de todas as células discutidas no topo
+    nome_arquivo_despesas = "../dados-limpos/aquisicao_por_classe_de_rendimento_e_estado/%s/dados-limpos/%s_tipos_despesas.csv" % (estado, estado)
+    
+    df_despesas = carregar_dataset_e_converter_dados(nome_arquivo_despesas)
+    df_despesas = df_despesas.drop(columns=['Total'])
+    df_despesas = df_despesas.drop(columns=['Despesa monetária e não monetária média mensal familiar (R$)'])
+    df_despesas = df_despesas.drop([0, 1, 2]).reset_index(drop=True)
+    df_despesas = retorna_dataset_com_soma_colunas_classes_sociais(df_despesas)
+    
+    return df_despesas
+
 def converter_dados_numericos_notacao_brasileira_para_float(value):
     if(value == '-'):
         return -1
