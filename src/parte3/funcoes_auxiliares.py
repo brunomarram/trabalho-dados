@@ -106,6 +106,24 @@ def plot_grafico_barras_lista_top_N_itens(df, classe_social, qtd_top_itens, cor)
     df.iloc[lista_top_N[:-1], [0, id_classe_social]].plot(kind='barh', x=colunas_df[0], y=colunas_df[id_classe_social], color=cor)
     plt.show()
 
+def plot_todos_graficos_barras_lista_top_N_itens(df, qtd_top_itens):
+
+    fig, axes = plt.subplots(nrows=6, ncols=1)
+
+    colunas_df = retorna_colunas_df(df)
+
+    cores = ["green", "yellow", "orange", "red", "blue", "purple"]
+
+    for i, coluna in enumerate(colunas_df[1:]):
+
+        id_classe_social = retorna_id_classe_social(df, coluna)
+
+        lista_top_N = retorna_indices_top_N_itens_mais_vendidos_por_classe_social(df, id_classe_social, qtd_top_itens)
+
+        df.iloc[lista_top_N[:-1], [0, id_classe_social]].plot(kind='barh', x=colunas_df[0], y=colunas_df[id_classe_social], color=cores[i], ax=axes[i], figsize=(6,20))
+    
+    plt.show()
+
 def retorna_colunas_df(df):
 
     return list(df.columns)
