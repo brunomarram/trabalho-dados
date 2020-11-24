@@ -14,6 +14,18 @@ def get_df_estado(estado):
     
     return df_despesas
 
+def get_df_estado_alimentacao(estado):
+    #realiza tratamento de todas as células discutidas no topo
+    nome_arquivo_alimentacao = "../dados-limpos/aquisicao_por_classe_de_rendimento_e_estado/%s/dados-limpos/%s_alimentacao.csv" % (estado, estado)
+    
+    df_despesas = carregar_dataset_e_converter_dados(nome_arquivo_alimentacao)
+    df_despesas = df_despesas.drop(columns=['Total'])
+    df_despesas = df_despesas.drop(columns=['Despesa monetária e não monetária média mensal familiar (R$)'])
+    df_despesas = df_despesas.drop([0]).reset_index(drop=True)
+    df_despesas = retorna_dataset_com_soma_colunas_classes_sociais(df_despesas)
+    
+    return df_despesas
+
 def converter_dados_numericos_notacao_brasileira_para_float(value):
     if(value == '-'):
         return -1
