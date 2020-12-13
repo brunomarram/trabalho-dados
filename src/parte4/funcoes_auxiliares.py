@@ -150,9 +150,7 @@ def retorna_id_classe_social(df, classe_social):
 
     return dicionario_df[classe_social]
 
-def carregar_df_despesas_gerais(estado):
-
-    nome_arquivo_despesas = "../dados-limpos/aquisicao_por_classe_de_rendimento_e_estado/%s/dados-limpos/%s_tipos_despesas.csv" % (estado, estado)
+def carregar_df_despesas_gerais(estado, nome_arquivo_despesas):
 
     df_despesas = carregar_dataset_e_converter_dados(nome_arquivo_despesas)
 
@@ -185,7 +183,7 @@ def df_despesas_gerais_invertido(df, estado):
     df_invertido.drop(index="Tipos de despesa, número e tamanho médio das famílias", inplace=True)
 
     df_invertido['Estado'] = estado
-    
+
     df_invertido['Classe social'] = df_invertido.index
 
     df_invertido.reset_index(drop=True, inplace=True)
