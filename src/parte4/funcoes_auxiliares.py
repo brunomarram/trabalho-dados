@@ -149,3 +149,48 @@ def retorna_id_classe_social(df, classe_social):
     dicionario_df = dicionario_classe_id(df)
 
     return dicionario_df[classe_social]
+
+def carregar_df_despesas_gerais(estado):
+
+    nome_arquivo_despesas = "../dados-limpos/aquisicao_por_classe_de_rendimento_e_estado/%s/dados-limpos/%s_tipos_despesas.csv" % (estado, estado)
+
+    df_despesas = carregar_dataset_e_converter_dados(nome_arquivo_despesas)
+
+    df_despesas = df_despesas.drop(columns=['Total'])
+    df_despesas = df_despesas.drop(columns=['Despesa monetária e não monetária média mensal familiar (R$)'])
+
+    df_despesas = df_despesas.drop([0, 1, 2]).reset_index(drop=True)
+
+    df_despesas = retorna_dataset_com_soma_colunas_classes_sociais(df_despesas)
+
+    return df_despesas
+
+def df_despesas_gerais_invertido(df, estado):
+
+    df_despesas = df
+    
+    df_despesas.iloc[0:-3, 1] = df_despesas.iloc[0:-3, 1].apply(lambda item: round((item/df_despesas.iloc[-1, 1]), 5))
+    df_despesas.iloc[0:-3, 2] = df_despesas.iloc[0:-3, 2].apply(lambda item: round((item/df_despesas.iloc[-1, 2]), 5))
+    df_despesas.iloc[0:-3, 3] = df_despesas.iloc[0:-3, 3].apply(lambda item: round((item/df_despesas.iloc[-1, 3]), 5))
+    df_despesas.iloc[0:-3, 4] = df_despesas.iloc[0:-3, 4].apply(lambda item: round((item/df_despesas.iloc[-1, 4]), 5))
+    df_despesas.iloc[0:-3, 5] = df_despesas.iloc[0:-3, 5].apply(lambda item: round((item/df_despesas.iloc[-1, 5]), 5))
+    df_despesas.iloc[0:-3, 6] = df_despesas.iloc[0:-3, 6].apply(lambda item: round((item/df_despesas.iloc[-1, 6]), 5))
+
+    df_despesas.iloc[-1, 1:] = 1
+
+    df_invertido = df_despesas.transpose()
+
+    df_invertido.columns = df_invertido.iloc[0]
+
+    df_invertido.drop(index="Tipos de despesa, número e tamanho médio das famílias", inplace=True)
+
+    df_invertido['Estado'] = estado
+    
+    df_invertido['Classe social'] = df_invertido.index
+
+    df_invertido.reset_index(drop=True, inplace=True)
+    df_invertido.columns.name = None
+
+    df_invertido.drop(columns="Número de famílias", inplace=True)
+
+    return df_invertido

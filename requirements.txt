@@ -3,7 +3,8 @@ jupyterlab
 pandas
 numpy
 matplotlib
-# sklearn
+sklearn
+seaborn
 jupyterthemes
 pylint
 xlrd
