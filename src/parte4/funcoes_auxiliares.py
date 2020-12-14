@@ -28,7 +28,7 @@ def get_df_estado_alimentacao(estado):
 
 def converter_dados_numericos_notacao_brasileira_para_float(value):
     if(value == '-'):
-        return -1
+        return 0
     resultado = value.replace(" ", "")
     resultado = resultado.replace(".", "")
     resultado = resultado.replace(",", ".")
@@ -150,7 +150,7 @@ def retorna_id_classe_social(df, classe_social):
 
     return dicionario_df[classe_social]
 
-def carregar_df_despesas_gerais(estado, nome_arquivo_despesas):
+def carregar_df_despesas_gerais(nome_arquivo_despesas):
 
     df_despesas = carregar_dataset_e_converter_dados(nome_arquivo_despesas)
 
@@ -163,18 +163,20 @@ def carregar_df_despesas_gerais(estado, nome_arquivo_despesas):
 
     return df_despesas
 
-def df_despesas_gerais_invertido(df, estado):
+def df_despesas_gerais_invertido(df, estado, porcentagem):
 
     df_despesas = df
     
-    df_despesas.iloc[0:-3, 1] = df_despesas.iloc[0:-3, 1].apply(lambda item: round((item/df_despesas.iloc[-1, 1]), 5))
-    df_despesas.iloc[0:-3, 2] = df_despesas.iloc[0:-3, 2].apply(lambda item: round((item/df_despesas.iloc[-1, 2]), 5))
-    df_despesas.iloc[0:-3, 3] = df_despesas.iloc[0:-3, 3].apply(lambda item: round((item/df_despesas.iloc[-1, 3]), 5))
-    df_despesas.iloc[0:-3, 4] = df_despesas.iloc[0:-3, 4].apply(lambda item: round((item/df_despesas.iloc[-1, 4]), 5))
-    df_despesas.iloc[0:-3, 5] = df_despesas.iloc[0:-3, 5].apply(lambda item: round((item/df_despesas.iloc[-1, 5]), 5))
-    df_despesas.iloc[0:-3, 6] = df_despesas.iloc[0:-3, 6].apply(lambda item: round((item/df_despesas.iloc[-1, 6]), 5))
+    if(porcentagem):
 
-    df_despesas.iloc[-1, 1:] = 1
+        df_despesas.iloc[0:-3, 1] = df_despesas.iloc[0:-3, 1].apply(lambda item: round((item/df_despesas.iloc[-1, 1]), 5))
+        df_despesas.iloc[0:-3, 2] = df_despesas.iloc[0:-3, 2].apply(lambda item: round((item/df_despesas.iloc[-1, 2]), 5))
+        df_despesas.iloc[0:-3, 3] = df_despesas.iloc[0:-3, 3].apply(lambda item: round((item/df_despesas.iloc[-1, 3]), 5))
+        df_despesas.iloc[0:-3, 4] = df_despesas.iloc[0:-3, 4].apply(lambda item: round((item/df_despesas.iloc[-1, 4]), 5))
+        df_despesas.iloc[0:-3, 5] = df_despesas.iloc[0:-3, 5].apply(lambda item: round((item/df_despesas.iloc[-1, 5]), 5))
+        df_despesas.iloc[0:-3, 6] = df_despesas.iloc[0:-3, 6].apply(lambda item: round((item/df_despesas.iloc[-1, 6]), 5))
+
+        df_despesas.iloc[-1, 1:] = 1
 
     df_invertido = df_despesas.transpose()
 

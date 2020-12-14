@@ -9,3 +9,4 @@ jupyterthemes
 pylint
 xlrd
 # Mlxtend
+statsmodels
