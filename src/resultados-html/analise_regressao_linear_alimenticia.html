@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>predicao_geral</title>
+<title>analise_regressao_linear_alimenticia</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -16362,19 +16362,14 @@ div#notebook {
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Apenas-carregando-o-dataset-e-fazendo-as-limpezas-feitas-nas-etapas-anteriores-do-TP">Apenas carregando o dataset e fazendo as limpezas feitas nas etapas anteriores do TP<a class="anchor-link" href="#Apenas-carregando-o-dataset-e-fazendo-as-limpezas-feitas-nas-etapas-anteriores-do-TP">&#182;</a></h1>
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">funcoes_auxiliares</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
 
 <span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">float_format</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">max_rows</span> <span class="o">=</span> <span class="mi">6</span>
@@ -16390,7 +16385,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">estado</span> <span class="o">=</span> <span class="s2">&quot;MG&quot;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">lista_estados</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AC&quot;</span><span class="p">,</span> <span class="s2">&quot;AL&quot;</span><span class="p">,</span> <span class="s2">&quot;AM&quot;</span><span class="p">,</span> <span class="s2">&quot;AP&quot;</span><span class="p">,</span> <span class="s2">&quot;BA&quot;</span><span class="p">,</span> <span class="s2">&quot;CE&quot;</span><span class="p">,</span> <span class="s2">&quot;DF&quot;</span><span class="p">,</span> <span class="s2">&quot;ES&quot;</span><span class="p">,</span> <span class="s2">&quot;GO&quot;</span><span class="p">,</span> <span class="s2">&quot;MA&quot;</span><span class="p">,</span> <span class="s2">&quot;MT&quot;</span><span class="p">,</span> <span class="s2">&quot;MS&quot;</span><span class="p">,</span> <span class="s2">&quot;MG&quot;</span><span class="p">,</span> <span class="s2">&quot;PA&quot;</span><span class="p">,</span> <span class="s2">&quot;PB&quot;</span><span class="p">,</span> <span class="s2">&quot;PR&quot;</span><span class="p">,</span> <span class="s2">&quot;PE&quot;</span><span class="p">,</span> <span class="s2">&quot;PI&quot;</span><span class="p">,</span> <span class="s2">&quot;RJ&quot;</span><span class="p">,</span> <span class="s2">&quot;RN&quot;</span><span class="p">,</span> <span class="s2">&quot;RO&quot;</span><span class="p">,</span> <span class="s2">&quot;RS&quot;</span><span class="p">,</span> <span class="s2">&quot;RR&quot;</span><span class="p">,</span> <span class="s2">&quot;SC&quot;</span><span class="p">,</span> <span class="s2">&quot;SE&quot;</span><span class="p">,</span> <span class="s2">&quot;SP&quot;</span><span class="p">,</span> <span class="s2">&quot;TO&quot;</span><span class="p">]</span>
 </pre></div>
 
     </div>
@@ -16403,7 +16398,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">nome_arquivo_despesas</span> <span class="o">=</span> <span class="s2">&quot;../dados-limpos/aquisicao_por_classe_de_rendimento_e_estado/</span><span class="si">%s</span><span class="s2">/dados-limpos/</span><span class="si">%s</span><span class="s2">_tipos_despesas.csv&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">estado</span><span class="p">,</span> <span class="n">estado</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_estados_brasil</span> <span class="o">=</span> <span class="kc">None</span>
 </pre></div>
 
     </div>
@@ -16416,7 +16411,14 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_despesas</span> <span class="o">=</span> <span class="n">carregar_dataset_e_converter_dados</span><span class="p">(</span><span class="n">nome_arquivo_despesas</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">estado</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lista_estados</span><span class="p">):</span>
+    <span class="n">nome_arquivo_despesas</span> <span class="o">=</span> <span class="s2">&quot;../dados-limpos/aquisicao_por_classe_de_rendimento_e_estado/</span><span class="si">%s</span><span class="s2">/dados-limpos/</span><span class="si">%s</span><span class="s2">_alimentacao.csv&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">estado</span><span class="p">,</span> <span class="n">estado</span><span class="p">)</span>
+    <span class="n">df_despesas</span> <span class="o">=</span> <span class="n">carregar_df_despesas_gerais</span><span class="p">(</span><span class="n">nome_arquivo_despesas</span><span class="p">)</span>
+    <span class="n">df_invertido</span> <span class="o">=</span> <span class="n">df_despesas_gerais_invertido</span><span class="p">(</span><span class="n">df_despesas</span><span class="p">,</span> <span class="n">estado</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">df_estados_brasil</span> <span class="o">=</span> <span class="n">df_invertido</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df_estados_brasil</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_estados_brasil</span><span class="p">,</span> <span class="n">df_invertido</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -16429,146 +16431,10 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_despesas</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_estados_brasil</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[5]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Tipos de despesa, número e tamanho médio das famílias</th>
-      <th>Despesa monetária e não monetária média mensal familiar (R$)</th>
-      <th>Total</th>
-      <th>Até 1908 (2)</th>
-      <th>Mais de 1908 a 2862</th>
-      <th>Mais de 2862 a 5724</th>
-      <th>Mais de 5724 a 9540</th>
-      <th>Mais de 9540 a 14310</th>
-      <th>Mais de 14310 a 23850</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Despesa total</td>
-      <td>4390.72</td>
-      <td>1501.78</td>
-      <td>2271.56</td>
-      <td>3697.32</td>
-      <td>6575.93</td>
-      <td>9589.42</td>
-      <td>14391.83</td>
-      <td>23891.78</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Despesas correntes</td>
-      <td>4082.30</td>
-      <td>1457.93</td>
-      <td>2159.63</td>
-      <td>3510.91</td>
-      <td>6027.63</td>
-      <td>8811.94</td>
-      <td>13263.37</td>
-      <td>20768.46</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Despesas de consumo</td>
-      <td>3635.92</td>
-      <td>1392.69</td>
-      <td>2039.02</td>
-      <td>3247.30</td>
-      <td>5409.91</td>
-      <td>7559.27</td>
-      <td>10752.93</td>
-      <td>15961.57</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>92</th>
-      <td>Prestação de imóvel</td>
-      <td>46.30</td>
-      <td>4.62</td>
-      <td>13.36</td>
-      <td>26.47</td>
-      <td>97.15</td>
-      <td>86.72</td>
-      <td>236.52</td>
-      <td>412.36</td>
-    </tr>
-    <tr>
-      <th>93</th>
-      <td>Número de famílias</td>
-      <td>7149295.00</td>
-      <td>1392069.00</td>
-      <td>1478894.00</td>
-      <td>2470800.00</td>
-      <td>1092145.00</td>
-      <td>384637.00</td>
-      <td>207088.00</td>
-      <td>123662.00</td>
-    </tr>
-    <tr>
-      <th>94</th>
-      <td>Tamanho médio da família</td>
-      <td>2.93</td>
-      <td>2.36</td>
-      <td>2.69</td>
-      <td>3.13</td>
-      <td>3.48</td>
-      <td>3.11</td>
-      <td>2.93</td>
-      <td>3.02</td>
-    </tr>
-  </tbody>
-</table>
-<p>95 rows × 9 columns</p>
-</div>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -16578,11 +16444,242 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_despesas</span> <span class="o">=</span> <span class="n">df_despesas</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Total&#39;</span><span class="p">])</span>
-<span class="n">df_despesas</span> <span class="o">=</span> <span class="n">df_despesas</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Despesa monetária e não monetária média mensal familiar (R$)&#39;</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_estados_brasil</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[6]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Arroz</th>
+      <th>Feijão</th>
+      <th>Orgânicos</th>
+      <th>Outros</th>
+      <th>Farinhas, féculas e massas</th>
+      <th>Macarrão</th>
+      <th>Farinha de trigo</th>
+      <th>Farinha de mandioca</th>
+      <th>Outras</th>
+      <th>Tubérculos e raízes</th>
+      <th>...</th>
+      <th>Sanduíches e salgados</th>
+      <th>Refrigerantes e outras bebidas não alcoólicas</th>
+      <th>Lanches</th>
+      <th>Cervejas, chopes e outras bebidas alcoólicas</th>
+      <th>Alimentação light e diet</th>
+      <th>Outras</th>
+      <th>Tamanho médio da família</th>
+      <th>Total gasto por classes</th>
+      <th>Estado</th>
+      <th>Classe social</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>18.14</td>
+      <td>5.94</td>
+      <td>0.00</td>
+      <td>4.74</td>
+      <td>15.38</td>
+      <td>3.94</td>
+      <td>0.63</td>
+      <td>6.34</td>
+      <td>4.48</td>
+      <td>6.29</td>
+      <td>...</td>
+      <td>13.77</td>
+      <td>17.68</td>
+      <td>17.83</td>
+      <td>6.52</td>
+      <td>0.00</td>
+      <td>18.07</td>
+      <td>3.72</td>
+      <td>1132.05</td>
+      <td>AC</td>
+      <td>Até 1908 (2)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>22.45</td>
+      <td>5.17</td>
+      <td>0.00</td>
+      <td>3.59</td>
+      <td>25.21</td>
+      <td>5.36</td>
+      <td>1.21</td>
+      <td>12.16</td>
+      <td>6.47</td>
+      <td>7.29</td>
+      <td>...</td>
+      <td>18.73</td>
+      <td>19.62</td>
+      <td>21.96</td>
+      <td>8.08</td>
+      <td>0.00</td>
+      <td>11.82</td>
+      <td>4.07</td>
+      <td>1443.81</td>
+      <td>AC</td>
+      <td>Mais de 1908 a 2862</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>16.37</td>
+      <td>3.85</td>
+      <td>0.00</td>
+      <td>3.47</td>
+      <td>21.31</td>
+      <td>1.88</td>
+      <td>0.79</td>
+      <td>7.29</td>
+      <td>11.35</td>
+      <td>2.90</td>
+      <td>...</td>
+      <td>36.30</td>
+      <td>20.60</td>
+      <td>24.62</td>
+      <td>26.27</td>
+      <td>0.17</td>
+      <td>40.23</td>
+      <td>3.99</td>
+      <td>1578.39</td>
+      <td>AC</td>
+      <td>Mais de 2862 a 5724</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>159</th>
+      <td>38.79</td>
+      <td>3.52</td>
+      <td>0.00</td>
+      <td>0.70</td>
+      <td>21.68</td>
+      <td>1.63</td>
+      <td>3.74</td>
+      <td>12.14</td>
+      <td>4.17</td>
+      <td>4.06</td>
+      <td>...</td>
+      <td>3.30</td>
+      <td>3.31</td>
+      <td>0.00</td>
+      <td>40.45</td>
+      <td>0.00</td>
+      <td>4.92</td>
+      <td>3.48</td>
+      <td>1245.30</td>
+      <td>TO</td>
+      <td>Mais de 5724 a 9540</td>
+    </tr>
+    <tr>
+      <th>160</th>
+      <td>17.37</td>
+      <td>2.08</td>
+      <td>0.00</td>
+      <td>0.17</td>
+      <td>25.58</td>
+      <td>5.93</td>
+      <td>0.00</td>
+      <td>2.66</td>
+      <td>16.99</td>
+      <td>4.02</td>
+      <td>...</td>
+      <td>8.95</td>
+      <td>1.21</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>7.88</td>
+      <td>3.43</td>
+      <td>1239.49</td>
+      <td>TO</td>
+      <td>Mais de 9540 a 14310</td>
+    </tr>
+    <tr>
+      <th>161</th>
+      <td>51.45</td>
+      <td>20.18</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>38.20</td>
+      <td>1.61</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>36.59</td>
+      <td>5.70</td>
+      <td>...</td>
+      <td>2.43</td>
+      <td>1.72</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>3.01</td>
+      <td>1339.79</td>
+      <td>TO</td>
+      <td>Mais de 14310 a 23850</td>
+    </tr>
+  </tbody>
+</table>
+<p>162 rows × 85 columns</p>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -16592,166 +16689,70 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_despesas</span> <span class="o">=</span> <span class="n">df_despesas</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">classes_sociais</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Até 1908 (2)&quot;</span><span class="p">,</span> <span class="s2">&quot;Mais de 1908 a 2862&quot;</span><span class="p">,</span> <span class="s2">&quot;Mais de 2862 a 5724&quot;</span><span class="p">,</span> <span class="s2">&quot;Mais de 5724 a 9540&quot;</span><span class="p">,</span> <span class="s2">&quot;Mais de 9540 a 14310&quot;</span><span class="p">,</span> <span class="s2">&quot;Mais de 14310 a 23850&quot;</span><span class="p">]</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="An&#225;lise-de-regress&#227;o-linear">An&#225;lise de regress&#227;o linear<a class="anchor-link" href="#An&#225;lise-de-regress&#227;o-linear">&#182;</a></h2>
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_despesas</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">regressao_linear_classes_sociais</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">classe_social</span><span class="p">):</span>
+
+    <span class="n">lista_colunas_afetam_valor_total</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Classe social&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">classe_social</span><span class="p">][</span><span class="n">lista_colunas_afetam_valor_total</span><span class="p">]</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Classe social&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">classe_social</span><span class="p">][</span><span class="s2">&quot;Total gasto por classes&quot;</span><span class="p">]</span>
+
+    <span class="n">lm</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+    <span class="n">lm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+    <span class="n">r2</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Coeficiente estimado:&quot;</span><span class="p">,</span> <span class="n">lm</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">R2 (score):&quot;</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Intercept: </span><span class="si">%.5f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">lm</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>
+
+    <span class="n">equacao_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">coef</span><span class="p">,</span> <span class="n">feat</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">coef_</span><span class="p">,</span><span class="n">lista_colunas_afetam_valor_total</span><span class="p">):</span>
+        <span class="n">equacao_str</span> <span class="o">+=</span> <span class="s2">&quot; + (</span><span class="si">%.5f</span><span class="s2"> * &#39;</span><span class="si">%s</span><span class="s2">&#39;)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">coef</span><span class="p">,</span> <span class="n">feat</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Equação do &#39;valor-mensal&#39; em termos de todos os atributos analisados:</span><span class="se">\n\n</span><span class="s2">  f(x) = </span><span class="si">%.5f%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">intercept_</span><span class="p">,</span> <span class="n">equacao_str</span><span class="p">))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Coeficiente de determinação é: </span><span class="si">%.5f</span><span class="s2">, ou seja, </span><span class="si">%.5f%%</span><span class="s2"> do &#39;valor-mensal&#39; não é explicada pelos atributos utilizados&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">r2</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">r2</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[8]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Tipos de despesa, número e tamanho médio das famílias</th>
-      <th>Até 1908 (2)</th>
-      <th>Mais de 1908 a 2862</th>
-      <th>Mais de 2862 a 5724</th>
-      <th>Mais de 5724 a 9540</th>
-      <th>Mais de 9540 a 14310</th>
-      <th>Mais de 14310 a 23850</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Alimentação</td>
-      <td>470.26</td>
-      <td>682.91</td>
-      <td>965.76</td>
-      <td>1183.04</td>
-      <td>1511.11</td>
-      <td>2111.32</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Habitação</td>
-      <td>817.04</td>
-      <td>1148.45</td>
-      <td>1658.10</td>
-      <td>2278.54</td>
-      <td>3102.18</td>
-      <td>4744.36</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Aluguel</td>
-      <td>423.40</td>
-      <td>581.47</td>
-      <td>799.82</td>
-      <td>1098.35</td>
-      <td>1430.00</td>
-      <td>2098.02</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>89</th>
-      <td>Prestação de imóvel</td>
-      <td>13.36</td>
-      <td>26.47</td>
-      <td>97.15</td>
-      <td>86.72</td>
-      <td>236.52</td>
-      <td>412.36</td>
-    </tr>
-    <tr>
-      <th>90</th>
-      <td>Número de famílias</td>
-      <td>1478894.00</td>
-      <td>2470800.00</td>
-      <td>1092145.00</td>
-      <td>384637.00</td>
-      <td>207088.00</td>
-      <td>123662.00</td>
-    </tr>
-    <tr>
-      <th>91</th>
-      <td>Tamanho médio da família</td>
-      <td>2.69</td>
-      <td>3.13</td>
-      <td>3.48</td>
-      <td>3.11</td>
-      <td>2.93</td>
-      <td>3.02</td>
-    </tr>
-  </tbody>
-</table>
-<p>92 rows × 7 columns</p>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="At&#233;-1908-(2)">At&#233; 1908 (2)<a class="anchor-link" href="#At&#233;-1908-(2)">&#182;</a></h3>
 </div>
 </div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_despesas</span> <span class="o">=</span> <span class="n">retorna_dataset_com_soma_colunas_classes_sociais</span><span class="p">(</span><span class="n">df_despesas</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_despesas</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">regressao_linear_classes_sociais</span><span class="p">(</span><span class="n">df_estados_brasil</span><span class="p">,</span> <span class="n">classes_sociais</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -16764,115 +16765,65 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[10]:</div>
+    <div class="prompt"></div>
 
 
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Coeficiente estimado: [ 1.01706171e+00  6.89806395e-01 -1.12197735e-03 -1.24655816e-03
+  7.67268514e-03 -5.20695563e-02  1.77878393e-01  1.44785761e-01
+  6.59923690e-02  5.89073263e-02  6.43813833e-02  3.11049068e-01
+ -1.75648957e-03  1.61485318e-01  9.53992780e-01  3.52430270e-01
+ -9.75842340e-03  2.55084402e-01  3.55235951e-01  2.02316390e-01
+  2.26040714e-01  3.67536396e-01  2.55941839e-01  3.34376789e-02
+ -9.89594443e-02 -5.20695563e-02  1.77878393e-01  1.44785761e-01
+  6.59923690e-02  5.89073263e-02  6.43813833e-02  3.11049068e-01
+ -1.75648957e-03  1.61485318e-01  1.16040646e+00  7.69362686e-01
+  2.41400158e-01  6.53983013e-03  4.19550699e-03  1.32759301e-03
+ -5.20695563e-02  1.77878393e-01  1.44785761e-01  6.59923690e-02
+  5.89073263e-02  6.43813833e-02  3.11049068e-01 -1.75648957e-03
+  1.61485318e-01  5.48090351e-01  3.52470927e-01  1.22464458e-01
+  5.38909257e-03 -5.20695563e-02  1.77878393e-01  1.44785761e-01
+  6.59923690e-02  5.89073263e-02  6.43813833e-02  3.11049068e-01
+ -1.75648957e-03  1.61485318e-01  1.20219642e+00  1.61354847e-01
+  1.57726524e-01  1.77789500e-01  7.06769086e-01  2.02538150e+00
+  5.57175602e-01  1.21705964e-01  7.48586516e-01  6.77369403e-01
+ -1.37902561e-01 -5.20695563e-02  1.77878393e-01  1.44785761e-01
+  6.59923690e-02  5.89073263e-02  6.43813833e-02  3.11049068e-01
+ -1.75648957e-03  1.61485318e-01  1.07454717e+00  7.53701547e-01
+  2.58030936e-01 -1.12197735e-03 -1.24655816e-03  7.67268514e-03
+ -5.20695563e-02  1.77878393e-01  1.44785761e-01  6.59923690e-02
+  5.89073263e-02  6.43813833e-02  3.11049068e-01 -1.75648957e-03
+  1.61485318e-01  1.47015507e+00  1.35085068e-02  4.30829758e-01
+  7.03298973e-01  6.53983013e-03  4.19550699e-03  1.32759301e-03
+ -1.12197735e-03 -1.24655816e-03  7.67268514e-03 -5.20695563e-02
+  1.77878393e-01  1.44785761e-01  6.59923690e-02  5.89073263e-02
+  6.43813833e-02  3.11049068e-01 -1.75648957e-03  1.61485318e-01
+  1.42930726e+00  1.01713937e+00  3.12064662e-03  6.53983013e-03
+  4.19550699e-03  1.32759301e-03  4.05810419e-01  6.15986165e-01
+  5.27712036e-01  9.12547603e-02 -5.20695563e-02  1.77878393e-01
+  1.44785761e-01  6.59923690e-02  5.89073263e-02  6.43813833e-02
+  3.11049068e-01 -1.75648957e-03  1.61485318e-01  1.47819491e+00
+  8.58382754e-01  3.19250063e-01  1.74506177e-02  5.83582495e-02
+  2.45124169e-02  3.55235951e-01  2.02316390e-01  2.26040714e-01
+ -1.55226527e-01  3.21394189e-01  6.74633819e-02  4.10383026e-02
+  5.14668406e-02 -5.20695563e-02  1.77878393e-01  1.44785761e-01
+  6.59923690e-02  5.89073263e-02  6.43813833e-02  3.11049068e-01
+ -1.75648957e-03  1.61485318e-01  6.17366398e-01  8.43590714e-01
+  1.52387805e+00  6.70629417e-01 -5.42534424e-02 -3.33947250e-01
+  1.15852948e-01  2.55781563e-01  6.53314250e-01 -8.42718326e-03
+  3.55235951e-01  2.02316390e-01  2.26040714e-01 -2.97693439e-02]
 
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+R2 (score): 1.0
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+Intercept: 13.33700
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Tipos de despesa, número e tamanho médio das famílias</th>
-      <th>Até 1908 (2)</th>
-      <th>Mais de 1908 a 2862</th>
-      <th>Mais de 2862 a 5724</th>
-      <th>Mais de 5724 a 9540</th>
-      <th>Mais de 9540 a 14310</th>
-      <th>Mais de 14310 a 23850</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Alimentação</td>
-      <td>470.26</td>
-      <td>682.91</td>
-      <td>965.76</td>
-      <td>1183.04</td>
-      <td>1511.11</td>
-      <td>2111.32</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Habitação</td>
-      <td>817.04</td>
-      <td>1148.45</td>
-      <td>1658.10</td>
-      <td>2278.54</td>
-      <td>3102.18</td>
-      <td>4744.36</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Aluguel</td>
-      <td>423.40</td>
-      <td>581.47</td>
-      <td>799.82</td>
-      <td>1098.35</td>
-      <td>1430.00</td>
-      <td>2098.02</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>90</th>
-      <td>Número de famílias</td>
-      <td>1478894.00</td>
-      <td>2470800.00</td>
-      <td>1092145.00</td>
-      <td>384637.00</td>
-      <td>207088.00</td>
-      <td>123662.00</td>
-    </tr>
-    <tr>
-      <th>91</th>
-      <td>Tamanho médio da família</td>
-      <td>2.69</td>
-      <td>3.13</td>
-      <td>3.48</td>
-      <td>3.11</td>
-      <td>2.93</td>
-      <td>3.02</td>
-    </tr>
-    <tr>
-      <th>92</th>
-      <td>Total gasto por classes</td>
-      <td>4723.72</td>
-      <td>7618.75</td>
-      <td>13440.48</td>
-      <td>19663.04</td>
-      <td>29365.22</td>
-      <td>48634.53</td>
-    </tr>
-  </tbody>
-</table>
-<p>93 rows × 7 columns</p>
+Equação do &#39;valor-mensal&#39; em termos de todos os atributos analisados:
+
+  f(x) = 13.33700 + (1.01706 * &#39;Arroz&#39;) + (0.68981 * &#39;Feijão&#39;) + (-0.00112 * &#39;Orgânicos&#39;) + (-0.00125 * &#39;Outros&#39;) + (0.00767 * &#39;Farinhas, féculas e massas&#39;) + (-0.05207 * &#39;Macarrão&#39;) + (0.17788 * &#39;Farinha de trigo&#39;) + (0.14479 * &#39;Farinha de mandioca&#39;) + (0.06599 * &#39;Outras&#39;) + (0.05891 * &#39;Tubérculos e raízes&#39;) + (0.06438 * &#39;Batata inglesa&#39;) + (0.31105 * &#39;Cenoura&#39;) + (-0.00176 * &#39;Mandioca&#39;) + (0.16149 * &#39;Outros&#39;) + (0.95399 * &#39;Açúcares e derivados&#39;) + (0.35243 * &#39;Açúcar refinado&#39;) + (-0.00976 * &#39;Açúcar cristal&#39;) + (0.25508 * &#39;Light e diet&#39;) + (0.35524 * &#39;Outros&#39;) + (0.20232 * &#39;Legumes e verduras&#39;) + (0.22604 * &#39;Tomate&#39;) + (0.36754 * &#39;Cebola&#39;) + (0.25594 * &#39;Alface&#39;) + (0.03344 * &#39;Outros&#39;) + (-0.09896 * &#39;Frutas&#39;) + (-0.05207 * &#39;Banana&#39;) + (0.17788 * &#39;Laranja&#39;) + (0.14479 * &#39;Maçã&#39;) + (0.06599 * &#39;Outras frutas&#39;) + (0.05891 * &#39;Carnes, vísceras e pescados&#39;) + (0.06438 * &#39;Carne de boi de primeira&#39;) + (0.31105 * &#39;Carne de boi de segunda&#39;) + (-0.00176 * &#39;Carne de suíno&#39;) + (0.16149 * &#39;Carnes e peixes industrializados&#39;) + (1.16041 * &#39;Pescados frescos&#39;) + (0.76936 * &#39;Outros&#39;) + (0.24140 * &#39;Aves e ovos&#39;) + (0.00654 * &#39;Frango&#39;) + (0.00420 * &#39;Ovo de galinha&#39;) + (0.00133 * &#39;Orgânicos&#39;) + (-0.05207 * &#39;Outros&#39;) + (0.17788 * &#39;Leites e derivados&#39;) + (0.14479 * &#39;Leite de vaca&#39;) + (0.06599 * &#39;Leite em pó&#39;) + (0.05891 * &#39;Queijos&#39;) + (0.06438 * &#39;Light e diet&#39;) + (0.31105 * &#39;Orgânicos&#39;) + (-0.00176 * &#39;Outros&#39;) + (0.16149 * &#39;Panificados&#39;) + (0.54809 * &#39;Pão francês&#39;) + (0.35247 * &#39;Biscoito&#39;) + (0.12246 * &#39;Light e diet&#39;) + (0.00539 * &#39;Outros panificados&#39;) + (-0.05207 * &#39;Óleos e gorduras&#39;) + (0.17788 * &#39;Óleo de soja&#39;) + (0.14479 * &#39;Azeite de oliva&#39;) + (0.06599 * &#39;Outros&#39;) + (0.05891 * &#39;Bebidas e infusões&#39;) + (0.06438 * &#39;Café moído&#39;) + (0.31105 * &#39;Refrigerantes&#39;) + (-0.00176 * &#39;Bebidas não alcoólicas light e diet&#39;) + (0.16149 * &#39;Cervejas e chopes&#39;) + (1.20220 * &#39;Outras bebidas alcoólicas&#39;) + (0.16135 * &#39;Outras&#39;) + (0.15773 * &#39;Enlatados e conservas&#39;) + (0.17779 * &#39;Sal e condimentos&#39;) + (0.70677 * &#39;Massa de tomate&#39;) + (2.02538 * &#39;Maionese&#39;) + (0.55718 * &#39;Sal refinado&#39;) + (0.12171 * &#39;Outros&#39;) + (0.74859 * &#39;Alimentos preparados&#39;) + (0.67737 * &#39;Outros alimentos&#39;) + (-0.13790 * &#39;Alimentação fora do domicílio&#39;) + (-0.05207 * &#39;Almoço e jantar&#39;) + (0.17788 * &#39;Café, leite, café/leite e chocolate&#39;) + (0.14479 * &#39;Sanduíches e salgados&#39;) + (0.06599 * &#39;Refrigerantes e outras bebidas não alcoólicas&#39;) + (0.05891 * &#39;Lanches&#39;) + (0.06438 * &#39;Cervejas, chopes e outras bebidas alcoólicas&#39;) + (0.31105 * &#39;Alimentação light e diet&#39;) + (-0.00176 * &#39;Outras&#39;) + (0.16149 * &#39;Tamanho médio da família&#39;)
+
+Coeficiente de determinação é: 1.00000, ou seja, 0.00000% do &#39;valor-mensal&#39; não é explicada pelos atributos utilizados
+</pre>
 </div>
-</div>
-
 </div>
 
 </div>
@@ -16882,14 +16833,97 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Parte-de-predi&#231;&#227;o">Parte de predi&#231;&#227;o<a class="anchor-link" href="#Parte-de-predi&#231;&#227;o">&#182;</a></h1>
+<h3 id="Mais-de-1908-a-2862">Mais de 1908 a 2862<a class="anchor-link" href="#Mais-de-1908-a-2862">&#182;</a></h3>
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">regressao_linear_classes_sociais</span><span class="p">(</span><span class="n">df_estados_brasil</span><span class="p">,</span> <span class="n">classes_sociais</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Coeficiente estimado: [ 4.60236412e-01  7.53581878e-01 -7.89906987e-03  1.32502534e-02
+  1.64097263e-02  3.73763465e-03  2.19723817e-01  3.07711748e-01
+  5.97520508e-02  1.64254610e-02 -2.51886465e-02  2.89123563e-01
+ -1.84335549e-03 -5.14270419e-02  6.59017364e-01  1.45010152e-01
+  2.46507515e-01  1.08013478e-02  2.56109276e-01  1.36384449e-01
+  3.44610119e-01  4.46493310e-01  1.61439208e-01  8.37434515e-02
+ -1.99547974e-02  3.73763465e-03  2.19723817e-01  3.07711748e-01
+  5.97520508e-02  1.64254610e-02 -2.51886465e-02  2.89123563e-01
+ -1.84335549e-03 -5.14270419e-02  1.01391683e+00  6.71899572e-01
+ -3.98635138e-02  7.04957417e-02  1.96284888e-01  1.13338071e-02
+  3.73763465e-03  2.19723817e-01  3.07711748e-01  5.97520508e-02
+  1.64254610e-02 -2.51886465e-02  2.89123563e-01 -1.84335549e-03
+ -5.14270419e-02  4.72225399e-01  1.30052949e-01  2.31746384e-01
+  5.18904170e-02  3.73763465e-03  2.19723817e-01  3.07711748e-01
+  5.97520508e-02  1.64254610e-02 -2.51886465e-02  2.89123563e-01
+ -1.84335549e-03 -5.14270419e-02  8.85918523e-01  3.47137921e-01
+  2.21671004e-01  1.46540117e-01  1.68917419e-01  2.27264740e+00
+  3.59092054e-01  1.11233148e-01  4.88536433e-01  7.57351510e-01
+  5.38231757e-01  3.73763465e-03  2.19723817e-01  3.07711748e-01
+  5.97520508e-02  1.64254610e-02 -2.51886465e-02  2.89123563e-01
+ -1.84335549e-03 -5.14270419e-02  1.24730569e+00  7.57562631e-01
+  4.99002207e-01 -7.89906987e-03  1.32502534e-02  1.64097263e-02
+  3.73763465e-03  2.19723817e-01  3.07711748e-01  5.97520508e-02
+  1.64254610e-02 -2.51886465e-02  2.89123563e-01 -1.84335549e-03
+ -5.14270419e-02  1.62277709e+00  1.07311642e-01  7.53751253e-01
+  2.59938833e-01  7.04957417e-02  1.96284888e-01  1.13338071e-02
+ -7.89906987e-03  1.32502534e-02  1.64097263e-02  3.73763465e-03
+  2.19723817e-01  3.07711748e-01  5.97520508e-02  1.64254610e-02
+ -2.51886465e-02  2.89123563e-01 -1.84335549e-03 -5.14270419e-02
+  1.56399314e+00  1.43581345e-01  8.55442209e-01  7.04957417e-02
+  1.96284888e-01  1.13338071e-02  5.52317862e-01  3.46118348e-01
+  3.33368707e-01  1.44383481e-02  3.73763465e-03  2.19723817e-01
+  3.07711748e-01  5.97520508e-02  1.64254610e-02 -2.51886465e-02
+  2.89123563e-01 -1.84335549e-03 -5.14270419e-02  1.33608197e+00
+  9.10508886e-02  1.05160118e-01  4.59126564e-02  5.73795064e-01
+  3.82008834e-01  2.56109276e-01  1.36384449e-01  3.44610119e-01
+  1.66337080e-01  5.87398136e-01  3.96959048e-01  2.29694273e-01
+  1.14175191e-02  3.73763465e-03  2.19723817e-01  3.07711748e-01
+  5.97520508e-02  1.64254610e-02 -2.51886465e-02  2.89123563e-01
+ -1.84335549e-03 -5.14270419e-02  7.55373013e-01  8.40104809e-01
+  1.37007549e+00  8.41515805e-01 -1.90988653e-01 -5.04434858e-01
+ -7.73003685e-02  7.66660613e-01  1.89873617e-01  7.15265532e-04
+  2.56109276e-01  1.36384449e-01  3.44610119e-01  2.81580770e-02]
+
+R2 (score): 1.0
+
+Intercept: 21.70495
+
+Equação do &#39;valor-mensal&#39; em termos de todos os atributos analisados:
+
+  f(x) = 21.70495 + (0.46024 * &#39;Arroz&#39;) + (0.75358 * &#39;Feijão&#39;) + (-0.00790 * &#39;Orgânicos&#39;) + (0.01325 * &#39;Outros&#39;) + (0.01641 * &#39;Farinhas, féculas e massas&#39;) + (0.00374 * &#39;Macarrão&#39;) + (0.21972 * &#39;Farinha de trigo&#39;) + (0.30771 * &#39;Farinha de mandioca&#39;) + (0.05975 * &#39;Outras&#39;) + (0.01643 * &#39;Tubérculos e raízes&#39;) + (-0.02519 * &#39;Batata inglesa&#39;) + (0.28912 * &#39;Cenoura&#39;) + (-0.00184 * &#39;Mandioca&#39;) + (-0.05143 * &#39;Outros&#39;) + (0.65902 * &#39;Açúcares e derivados&#39;) + (0.14501 * &#39;Açúcar refinado&#39;) + (0.24651 * &#39;Açúcar cristal&#39;) + (0.01080 * &#39;Light e diet&#39;) + (0.25611 * &#39;Outros&#39;) + (0.13638 * &#39;Legumes e verduras&#39;) + (0.34461 * &#39;Tomate&#39;) + (0.44649 * &#39;Cebola&#39;) + (0.16144 * &#39;Alface&#39;) + (0.08374 * &#39;Outros&#39;) + (-0.01995 * &#39;Frutas&#39;) + (0.00374 * &#39;Banana&#39;) + (0.21972 * &#39;Laranja&#39;) + (0.30771 * &#39;Maçã&#39;) + (0.05975 * &#39;Outras frutas&#39;) + (0.01643 * &#39;Carnes, vísceras e pescados&#39;) + (-0.02519 * &#39;Carne de boi de primeira&#39;) + (0.28912 * &#39;Carne de boi de segunda&#39;) + (-0.00184 * &#39;Carne de suíno&#39;) + (-0.05143 * &#39;Carnes e peixes industrializados&#39;) + (1.01392 * &#39;Pescados frescos&#39;) + (0.67190 * &#39;Outros&#39;) + (-0.03986 * &#39;Aves e ovos&#39;) + (0.07050 * &#39;Frango&#39;) + (0.19628 * &#39;Ovo de galinha&#39;) + (0.01133 * &#39;Orgânicos&#39;) + (0.00374 * &#39;Outros&#39;) + (0.21972 * &#39;Leites e derivados&#39;) + (0.30771 * &#39;Leite de vaca&#39;) + (0.05975 * &#39;Leite em pó&#39;) + (0.01643 * &#39;Queijos&#39;) + (-0.02519 * &#39;Light e diet&#39;) + (0.28912 * &#39;Orgânicos&#39;) + (-0.00184 * &#39;Outros&#39;) + (-0.05143 * &#39;Panificados&#39;) + (0.47223 * &#39;Pão francês&#39;) + (0.13005 * &#39;Biscoito&#39;) + (0.23175 * &#39;Light e diet&#39;) + (0.05189 * &#39;Outros panificados&#39;) + (0.00374 * &#39;Óleos e gorduras&#39;) + (0.21972 * &#39;Óleo de soja&#39;) + (0.30771 * &#39;Azeite de oliva&#39;) + (0.05975 * &#39;Outros&#39;) + (0.01643 * &#39;Bebidas e infusões&#39;) + (-0.02519 * &#39;Café moído&#39;) + (0.28912 * &#39;Refrigerantes&#39;) + (-0.00184 * &#39;Bebidas não alcoólicas light e diet&#39;) + (-0.05143 * &#39;Cervejas e chopes&#39;) + (0.88592 * &#39;Outras bebidas alcoólicas&#39;) + (0.34714 * &#39;Outras&#39;) + (0.22167 * &#39;Enlatados e conservas&#39;) + (0.14654 * &#39;Sal e condimentos&#39;) + (0.16892 * &#39;Massa de tomate&#39;) + (2.27265 * &#39;Maionese&#39;) + (0.35909 * &#39;Sal refinado&#39;) + (0.11123 * &#39;Outros&#39;) + (0.48854 * &#39;Alimentos preparados&#39;) + (0.75735 * &#39;Outros alimentos&#39;) + (0.53823 * &#39;Alimentação fora do domicílio&#39;) + (0.00374 * &#39;Almoço e jantar&#39;) + (0.21972 * &#39;Café, leite, café/leite e chocolate&#39;) + (0.30771 * &#39;Sanduíches e salgados&#39;) + (0.05975 * &#39;Refrigerantes e outras bebidas não alcoólicas&#39;) + (0.01643 * &#39;Lanches&#39;) + (-0.02519 * &#39;Cervejas, chopes e outras bebidas alcoólicas&#39;) + (0.28912 * &#39;Alimentação light e diet&#39;) + (-0.00184 * &#39;Outras&#39;) + (-0.05143 * &#39;Tamanho médio da família&#39;)
+
+Coeficiente de determinação é: 1.00000, ou seja, 0.00000% do &#39;valor-mensal&#39; não é explicada pelos atributos utilizados
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Converter-dados-num&#233;ricos-para-percentuais">Converter dados num&#233;ricos para percentuais<a class="anchor-link" href="#Converter-dados-num&#233;ricos-para-percentuais">&#182;</a></h2>
+<h3 id="Mais-de-2862-a-5724">Mais de 2862 a 5724<a class="anchor-link" href="#Mais-de-2862-a-5724">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -16898,52 +16932,263 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">converter_valores_para_porcentagem</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">round</span><span class="p">((</span><span class="n">item</span><span class="o">/</span><span class="n">total</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">regressao_linear_classes_sociais</span><span class="p">(</span><span class="n">df_estados_brasil</span><span class="p">,</span> <span class="n">classes_sociais</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Coeficiente estimado: [ 1.02623559e+00  6.33059104e-01 -3.93715003e-03  4.73594877e-03
+  4.66355289e-02  4.36269792e-02  3.96840290e-02  2.10569367e-01
+  2.90605738e-01  3.12358147e-02  7.96483371e-02  1.87907037e-01
+  5.66841273e-02  9.49787522e-02  7.32968080e-01  3.61404405e-01
+  4.72161557e-02 -1.36473861e-02  3.38120831e-01 -7.79055356e-04
+  1.78045144e-01  3.68677950e-01  1.46667883e-01  1.30676191e-01
+  4.93440650e-02  4.36269792e-02  3.96840290e-02  2.10569367e-01
+  2.90605738e-01  3.12358147e-02  7.96483371e-02  1.87907037e-01
+  5.66841273e-02  9.49787522e-02  5.46219210e-01  2.22724084e-01
+  1.02351051e-01  1.11218308e-02 -1.49149767e-01  4.85455305e-02
+  4.36269792e-02  3.96840290e-02  2.10569367e-01  2.90605738e-01
+  3.12358147e-02  7.96483371e-02  1.87907037e-01  5.66841273e-02
+  9.49787522e-02  9.56234548e-01  4.84970139e-01  1.07372790e-01
+  7.35666639e-02  4.36269792e-02  3.96840290e-02  2.10569367e-01
+  2.90605738e-01  3.12358147e-02  7.96483371e-02  1.87907037e-01
+  5.66841273e-02  9.49787522e-02  1.02318706e+00  4.10708521e-02
+ -3.78120748e-03  3.20196782e-01  6.65759854e-01  1.74336127e+00
+  1.11016782e-02  1.04973578e-01  3.62751410e-01  6.41650524e-01
+  5.91217667e-01  4.36269792e-02  3.96840290e-02  2.10569367e-01
+  2.90605738e-01  3.12358147e-02  7.96483371e-02  1.87907037e-01
+  5.66841273e-02  9.49787522e-02  1.57824442e+00  1.00872408e+00
+  4.85457192e-01 -3.93715003e-03  4.73594877e-03  4.66355289e-02
+  4.36269792e-02  3.96840290e-02  2.10569367e-01  2.90605738e-01
+  3.12358147e-02  7.96483371e-02  1.87907037e-01  5.66841273e-02
+  9.49787522e-02  1.48891802e+00  3.36089320e-01  7.21348769e-01
+  3.47898785e-01  1.11218308e-02 -1.49149767e-01  4.85455305e-02
+ -3.93715003e-03  4.73594877e-03  4.66355289e-02  4.36269792e-02
+  3.96840290e-02  2.10569367e-01  2.90605738e-01  3.12358147e-02
+  7.96483371e-02  1.87907037e-01  5.66841273e-02  9.49787522e-02
+  1.31060927e+00  2.79444518e-01  7.27504060e-01  1.11218308e-02
+ -1.49149767e-01  4.85455305e-02  2.56499908e-01  1.15541367e-01
+  2.18106868e-01 -1.59109988e-01  4.36269792e-02  3.96840290e-02
+  2.10569367e-01  2.90605738e-01  3.12358147e-02  7.96483371e-02
+  1.87907037e-01  5.66841273e-02  9.49787522e-02  1.83657767e+00
+  3.96584607e-01  3.42534608e-01  1.62553052e-02  8.91908001e-01
+  1.91162728e-01  3.38120831e-01 -7.79055356e-04  1.78045144e-01
+  1.67636464e-01  3.01133128e-01  1.44011457e-01  1.30338902e-02
+  4.95449523e-02  4.36269792e-02  3.96840290e-02  2.10569367e-01
+  2.90605738e-01  3.12358147e-02  7.96483371e-02  1.87907037e-01
+  5.66841273e-02  9.49787522e-02  1.19414933e+00  9.30562831e-01
+  1.53914817e+00  5.65846047e-01 -4.67432638e-01  3.36720479e-01
+  2.06708655e-01  1.59598877e-01  5.59049798e-01 -7.69199630e-04
+  3.38120831e-01 -7.79055356e-04  1.78045144e-01  8.56465316e-03]
+
+R2 (score): 1.0
+
+Intercept: 29.63796
+
+Equação do &#39;valor-mensal&#39; em termos de todos os atributos analisados:
+
+  f(x) = 29.63796 + (1.02624 * &#39;Arroz&#39;) + (0.63306 * &#39;Feijão&#39;) + (-0.00394 * &#39;Orgânicos&#39;) + (0.00474 * &#39;Outros&#39;) + (0.04664 * &#39;Farinhas, féculas e massas&#39;) + (0.04363 * &#39;Macarrão&#39;) + (0.03968 * &#39;Farinha de trigo&#39;) + (0.21057 * &#39;Farinha de mandioca&#39;) + (0.29061 * &#39;Outras&#39;) + (0.03124 * &#39;Tubérculos e raízes&#39;) + (0.07965 * &#39;Batata inglesa&#39;) + (0.18791 * &#39;Cenoura&#39;) + (0.05668 * &#39;Mandioca&#39;) + (0.09498 * &#39;Outros&#39;) + (0.73297 * &#39;Açúcares e derivados&#39;) + (0.36140 * &#39;Açúcar refinado&#39;) + (0.04722 * &#39;Açúcar cristal&#39;) + (-0.01365 * &#39;Light e diet&#39;) + (0.33812 * &#39;Outros&#39;) + (-0.00078 * &#39;Legumes e verduras&#39;) + (0.17805 * &#39;Tomate&#39;) + (0.36868 * &#39;Cebola&#39;) + (0.14667 * &#39;Alface&#39;) + (0.13068 * &#39;Outros&#39;) + (0.04934 * &#39;Frutas&#39;) + (0.04363 * &#39;Banana&#39;) + (0.03968 * &#39;Laranja&#39;) + (0.21057 * &#39;Maçã&#39;) + (0.29061 * &#39;Outras frutas&#39;) + (0.03124 * &#39;Carnes, vísceras e pescados&#39;) + (0.07965 * &#39;Carne de boi de primeira&#39;) + (0.18791 * &#39;Carne de boi de segunda&#39;) + (0.05668 * &#39;Carne de suíno&#39;) + (0.09498 * &#39;Carnes e peixes industrializados&#39;) + (0.54622 * &#39;Pescados frescos&#39;) + (0.22272 * &#39;Outros&#39;) + (0.10235 * &#39;Aves e ovos&#39;) + (0.01112 * &#39;Frango&#39;) + (-0.14915 * &#39;Ovo de galinha&#39;) + (0.04855 * &#39;Orgânicos&#39;) + (0.04363 * &#39;Outros&#39;) + (0.03968 * &#39;Leites e derivados&#39;) + (0.21057 * &#39;Leite de vaca&#39;) + (0.29061 * &#39;Leite em pó&#39;) + (0.03124 * &#39;Queijos&#39;) + (0.07965 * &#39;Light e diet&#39;) + (0.18791 * &#39;Orgânicos&#39;) + (0.05668 * &#39;Outros&#39;) + (0.09498 * &#39;Panificados&#39;) + (0.95623 * &#39;Pão francês&#39;) + (0.48497 * &#39;Biscoito&#39;) + (0.10737 * &#39;Light e diet&#39;) + (0.07357 * &#39;Outros panificados&#39;) + (0.04363 * &#39;Óleos e gorduras&#39;) + (0.03968 * &#39;Óleo de soja&#39;) + (0.21057 * &#39;Azeite de oliva&#39;) + (0.29061 * &#39;Outros&#39;) + (0.03124 * &#39;Bebidas e infusões&#39;) + (0.07965 * &#39;Café moído&#39;) + (0.18791 * &#39;Refrigerantes&#39;) + (0.05668 * &#39;Bebidas não alcoólicas light e diet&#39;) + (0.09498 * &#39;Cervejas e chopes&#39;) + (1.02319 * &#39;Outras bebidas alcoólicas&#39;) + (0.04107 * &#39;Outras&#39;) + (-0.00378 * &#39;Enlatados e conservas&#39;) + (0.32020 * &#39;Sal e condimentos&#39;) + (0.66576 * &#39;Massa de tomate&#39;) + (1.74336 * &#39;Maionese&#39;) + (0.01110 * &#39;Sal refinado&#39;) + (0.10497 * &#39;Outros&#39;) + (0.36275 * &#39;Alimentos preparados&#39;) + (0.64165 * &#39;Outros alimentos&#39;) + (0.59122 * &#39;Alimentação fora do domicílio&#39;) + (0.04363 * &#39;Almoço e jantar&#39;) + (0.03968 * &#39;Café, leite, café/leite e chocolate&#39;) + (0.21057 * &#39;Sanduíches e salgados&#39;) + (0.29061 * &#39;Refrigerantes e outras bebidas não alcoólicas&#39;) + (0.03124 * &#39;Lanches&#39;) + (0.07965 * &#39;Cervejas, chopes e outras bebidas alcoólicas&#39;) + (0.18791 * &#39;Alimentação light e diet&#39;) + (0.05668 * &#39;Outras&#39;) + (0.09498 * &#39;Tamanho médio da família&#39;)
+
+Coeficiente de determinação é: 1.00000, ou seja, 0.00000% do &#39;valor-mensal&#39; não é explicada pelos atributos utilizados
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Mais-de-5724-a-9540">Mais de 5724 a 9540<a class="anchor-link" href="#Mais-de-5724-a-9540">&#182;</a></h3>
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">converter_valores_para_porcentagem</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],))</span>
-<span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">converter_valores_para_porcentagem</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],))</span>
-<span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">converter_valores_para_porcentagem</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],))</span>
-<span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">converter_valores_para_porcentagem</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],))</span>
-<span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">converter_valores_para_porcentagem</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">],))</span>
-<span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">converter_valores_para_porcentagem</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">],))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">regressao_linear_classes_sociais</span><span class="p">(</span><span class="n">df_estados_brasil</span><span class="p">,</span> <span class="n">classes_sociais</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Coeficiente estimado: [ 1.30707798  0.17350135  0.01022792 -0.00967183  0.01510121  0.11732638
+  0.13133646  0.20923183  0.26751117  0.02041073  0.00533109  0.12810516
+  0.00246186  0.21238575  1.08079191  0.40316188  0.11614976  0.16953885
+  0.39245622 -0.10939782  0.0320789   0.43162434  0.27438451  0.09030411
+ -0.06489762  0.11732638  0.13133646  0.20923183  0.26751117  0.02041073
+  0.00533109  0.12810516  0.00246186  0.21238575  0.61488291  0.13632195
+  0.29033517 -0.02055327 -0.08801914  0.05055993  0.11732638  0.13133646
+  0.20923183  0.26751117  0.02041073  0.00533109  0.12810516  0.00246186
+  0.21238575  0.79414186  0.37831835  0.20252667 -0.05495736  0.11732638
+  0.13133646  0.20923183  0.26751117  0.02041073  0.00533109  0.12810516
+  0.00246186  0.21238575  1.51702357  0.41915344  0.10847901  0.24734555
+  0.7414889   1.8220033   0.52655655  0.3385654  -0.00418265  0.57003592
+  0.37152815  0.11732638  0.13133646  0.20923183  0.26751117  0.02041073
+  0.00533109  0.12810516  0.00246186  0.21238575  1.1909323   0.89763304
+  0.29734282  0.01022792 -0.00967183  0.01510121  0.11732638  0.13133646
+  0.20923183  0.26751117  0.02041073  0.00533109  0.12810516  0.00246186
+  0.21238575  1.45129205  0.10647777  0.81457187  0.4752396  -0.02055327
+ -0.08801914  0.05055993  0.01022792 -0.00967183  0.01510121  0.11732638
+  0.13133646  0.20923183  0.26751117  0.02041073  0.00533109  0.12810516
+  0.00246186  0.21238575  1.25201769  0.81315267 -0.06336056 -0.02055327
+ -0.08801914  0.05055993  0.45158083  0.4944025   0.17759485  0.31493071
+  0.11732638  0.13133646  0.20923183  0.26751117  0.02041073  0.00533109
+  0.12810516  0.00246186  0.21238575  1.63881005 -0.28729634  0.77963022
+  0.00808313  0.74600459  0.50123864  0.39245622 -0.10939782  0.0320789
+ -0.06315657  0.35146186  0.08062939  0.03767457  0.02080083  0.11732638
+  0.13133646  0.20923183  0.26751117  0.02041073  0.00533109  0.12810516
+  0.00246186  0.21238575  0.56029968  1.00039284  1.7214759   0.40384155
+ -0.10285047  0.15831184  0.58681464  0.23423175  0.35812941  0.05094746
+  0.39245622 -0.10939782  0.0320789   0.03633361]
+
+R2 (score): 1.0
+
+Intercept: -3.09042
+
+Equação do &#39;valor-mensal&#39; em termos de todos os atributos analisados:
+
+  f(x) = -3.09042 + (1.30708 * &#39;Arroz&#39;) + (0.17350 * &#39;Feijão&#39;) + (0.01023 * &#39;Orgânicos&#39;) + (-0.00967 * &#39;Outros&#39;) + (0.01510 * &#39;Farinhas, féculas e massas&#39;) + (0.11733 * &#39;Macarrão&#39;) + (0.13134 * &#39;Farinha de trigo&#39;) + (0.20923 * &#39;Farinha de mandioca&#39;) + (0.26751 * &#39;Outras&#39;) + (0.02041 * &#39;Tubérculos e raízes&#39;) + (0.00533 * &#39;Batata inglesa&#39;) + (0.12811 * &#39;Cenoura&#39;) + (0.00246 * &#39;Mandioca&#39;) + (0.21239 * &#39;Outros&#39;) + (1.08079 * &#39;Açúcares e derivados&#39;) + (0.40316 * &#39;Açúcar refinado&#39;) + (0.11615 * &#39;Açúcar cristal&#39;) + (0.16954 * &#39;Light e diet&#39;) + (0.39246 * &#39;Outros&#39;) + (-0.10940 * &#39;Legumes e verduras&#39;) + (0.03208 * &#39;Tomate&#39;) + (0.43162 * &#39;Cebola&#39;) + (0.27438 * &#39;Alface&#39;) + (0.09030 * &#39;Outros&#39;) + (-0.06490 * &#39;Frutas&#39;) + (0.11733 * &#39;Banana&#39;) + (0.13134 * &#39;Laranja&#39;) + (0.20923 * &#39;Maçã&#39;) + (0.26751 * &#39;Outras frutas&#39;) + (0.02041 * &#39;Carnes, vísceras e pescados&#39;) + (0.00533 * &#39;Carne de boi de primeira&#39;) + (0.12811 * &#39;Carne de boi de segunda&#39;) + (0.00246 * &#39;Carne de suíno&#39;) + (0.21239 * &#39;Carnes e peixes industrializados&#39;) + (0.61488 * &#39;Pescados frescos&#39;) + (0.13632 * &#39;Outros&#39;) + (0.29034 * &#39;Aves e ovos&#39;) + (-0.02055 * &#39;Frango&#39;) + (-0.08802 * &#39;Ovo de galinha&#39;) + (0.05056 * &#39;Orgânicos&#39;) + (0.11733 * &#39;Outros&#39;) + (0.13134 * &#39;Leites e derivados&#39;) + (0.20923 * &#39;Leite de vaca&#39;) + (0.26751 * &#39;Leite em pó&#39;) + (0.02041 * &#39;Queijos&#39;) + (0.00533 * &#39;Light e diet&#39;) + (0.12811 * &#39;Orgânicos&#39;) + (0.00246 * &#39;Outros&#39;) + (0.21239 * &#39;Panificados&#39;) + (0.79414 * &#39;Pão francês&#39;) + (0.37832 * &#39;Biscoito&#39;) + (0.20253 * &#39;Light e diet&#39;) + (-0.05496 * &#39;Outros panificados&#39;) + (0.11733 * &#39;Óleos e gorduras&#39;) + (0.13134 * &#39;Óleo de soja&#39;) + (0.20923 * &#39;Azeite de oliva&#39;) + (0.26751 * &#39;Outros&#39;) + (0.02041 * &#39;Bebidas e infusões&#39;) + (0.00533 * &#39;Café moído&#39;) + (0.12811 * &#39;Refrigerantes&#39;) + (0.00246 * &#39;Bebidas não alcoólicas light e diet&#39;) + (0.21239 * &#39;Cervejas e chopes&#39;) + (1.51702 * &#39;Outras bebidas alcoólicas&#39;) + (0.41915 * &#39;Outras&#39;) + (0.10848 * &#39;Enlatados e conservas&#39;) + (0.24735 * &#39;Sal e condimentos&#39;) + (0.74149 * &#39;Massa de tomate&#39;) + (1.82200 * &#39;Maionese&#39;) + (0.52656 * &#39;Sal refinado&#39;) + (0.33857 * &#39;Outros&#39;) + (-0.00418 * &#39;Alimentos preparados&#39;) + (0.57004 * &#39;Outros alimentos&#39;) + (0.37153 * &#39;Alimentação fora do domicílio&#39;) + (0.11733 * &#39;Almoço e jantar&#39;) + (0.13134 * &#39;Café, leite, café/leite e chocolate&#39;) + (0.20923 * &#39;Sanduíches e salgados&#39;) + (0.26751 * &#39;Refrigerantes e outras bebidas não alcoólicas&#39;) + (0.02041 * &#39;Lanches&#39;) + (0.00533 * &#39;Cervejas, chopes e outras bebidas alcoólicas&#39;) + (0.12811 * &#39;Alimentação light e diet&#39;) + (0.00246 * &#39;Outras&#39;) + (0.21239 * &#39;Tamanho médio da família&#39;)
+
+Coeficiente de determinação é: 1.00000, ou seja, 0.00000% do &#39;valor-mensal&#39; não é explicada pelos atributos utilizados
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Mais-de-9540-a-14310">Mais de 9540 a 14310<a class="anchor-link" href="#Mais-de-9540-a-14310">&#182;</a></h3>
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_despesas</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">1</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">regressao_linear_classes_sociais</span><span class="p">(</span><span class="n">df_estados_brasil</span><span class="p">,</span> <span class="n">classes_sociais</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Coeficiente estimado: [ 2.76556765e-01  1.50017299e-01 -4.11898967e-03  4.65435305e-02
+  1.62374826e-03  2.27723546e-01  8.58035770e-02  1.72039589e-01
+  1.90043105e-01  5.19156018e-02  2.32048575e-01  9.95519759e-02
+  2.28186285e-01  2.24631938e-01  4.41383966e-01  8.10419074e-02
+  1.02694389e-01  4.36949533e-02  2.14073201e-01  2.74370919e-01
+  1.39437889e-01  3.66638560e-01  1.81985996e-01  8.62816403e-02
+  1.27453243e-02  2.27723546e-01  8.58035770e-02  1.72039589e-01
+  1.90043105e-01  5.19156018e-02  2.32048575e-01  9.95519759e-02
+  2.28186285e-01  2.24631938e-01  1.43681740e-01  8.62534062e-02
+ -2.79733011e-02 -8.67554116e-02  7.75458595e-02  6.54895983e-02
+  2.27723546e-01  8.58035770e-02  1.72039589e-01  1.90043105e-01
+  5.19156018e-02  2.32048575e-01  9.95519759e-02  2.28186285e-01
+  2.24631938e-01  6.13454368e-01  1.85201924e-01  3.41851917e-02
+  2.03655233e-01  2.27723546e-01  8.58035770e-02  1.72039589e-01
+  1.90043105e-01  5.19156018e-02  2.32048575e-01  9.95519759e-02
+  2.28186285e-01  2.24631938e-01  1.21094202e+00  1.95938523e-01
+  2.29430539e-01  8.77286955e-02  6.97949589e-01  1.73466287e+00
+  1.22496327e-01  6.13277535e-01  6.13276152e-02  3.40129253e-01
+  5.45996527e-01  2.27723546e-01  8.58035770e-02  1.72039589e-01
+  1.90043105e-01  5.19156018e-02  2.32048575e-01  9.95519759e-02
+  2.28186285e-01  2.24631938e-01  1.54955211e+00  9.33075979e-01
+  3.37990841e-01 -4.11898967e-03  4.65435305e-02  1.62374826e-03
+  2.27723546e-01  8.58035770e-02  1.72039589e-01  1.90043105e-01
+  5.19156018e-02  2.32048575e-01  9.95519759e-02  2.28186285e-01
+  2.24631938e-01  1.89032894e+00  6.20663936e-01  8.00012032e-01
+  2.90855601e-01 -8.67554116e-02  7.75458595e-02  6.54895983e-02
+ -4.11898967e-03  4.65435305e-02  1.62374826e-03  2.27723546e-01
+  8.58035770e-02  1.72039589e-01  1.90043105e-01  5.19156018e-02
+  2.32048575e-01  9.95519759e-02  2.28186285e-01  2.24631938e-01
+  1.39139987e+00  4.75489205e-01  3.54177206e-01 -8.67554116e-02
+  7.75458595e-02  6.54895983e-02  4.97072151e-01  6.27019527e-01
+  1.65131640e-01  2.33723479e-01  2.27723546e-01  8.58035770e-02
+  1.72039589e-01  1.90043105e-01  5.19156018e-02  2.32048575e-01
+  9.95519759e-02  2.28186285e-01  2.24631938e-01  1.58972084e+00
+  3.08323998e-02  2.18686573e-01  4.02138411e-02  3.62353983e-01
+  6.63100065e-01  2.14073201e-01  2.74370919e-01  1.39437889e-01
+  3.11609016e-01  3.58282281e-01  4.96066532e-02  6.83615322e-02
+  1.57050909e-02  2.27723546e-01  8.58035770e-02  1.72039589e-01
+  1.90043105e-01  5.19156018e-02  2.32048575e-01  9.95519759e-02
+  2.28186285e-01  2.24631938e-01  1.27725679e+00  1.01652640e+00
+  1.66729276e+00  2.74162837e-01  4.96676321e-02  4.49017379e-01
+  1.60478929e-01  1.27006511e-01  4.82139281e-01 -1.39749071e-02
+  2.14073201e-01  2.74370919e-01  1.39437889e-01 -2.04627217e-02]
+
+R2 (score): 1.0
+
+Intercept: 67.29713
+
+Equação do &#39;valor-mensal&#39; em termos de todos os atributos analisados:
+
+  f(x) = 67.29713 + (0.27656 * &#39;Arroz&#39;) + (0.15002 * &#39;Feijão&#39;) + (-0.00412 * &#39;Orgânicos&#39;) + (0.04654 * &#39;Outros&#39;) + (0.00162 * &#39;Farinhas, féculas e massas&#39;) + (0.22772 * &#39;Macarrão&#39;) + (0.08580 * &#39;Farinha de trigo&#39;) + (0.17204 * &#39;Farinha de mandioca&#39;) + (0.19004 * &#39;Outras&#39;) + (0.05192 * &#39;Tubérculos e raízes&#39;) + (0.23205 * &#39;Batata inglesa&#39;) + (0.09955 * &#39;Cenoura&#39;) + (0.22819 * &#39;Mandioca&#39;) + (0.22463 * &#39;Outros&#39;) + (0.44138 * &#39;Açúcares e derivados&#39;) + (0.08104 * &#39;Açúcar refinado&#39;) + (0.10269 * &#39;Açúcar cristal&#39;) + (0.04369 * &#39;Light e diet&#39;) + (0.21407 * &#39;Outros&#39;) + (0.27437 * &#39;Legumes e verduras&#39;) + (0.13944 * &#39;Tomate&#39;) + (0.36664 * &#39;Cebola&#39;) + (0.18199 * &#39;Alface&#39;) + (0.08628 * &#39;Outros&#39;) + (0.01275 * &#39;Frutas&#39;) + (0.22772 * &#39;Banana&#39;) + (0.08580 * &#39;Laranja&#39;) + (0.17204 * &#39;Maçã&#39;) + (0.19004 * &#39;Outras frutas&#39;) + (0.05192 * &#39;Carnes, vísceras e pescados&#39;) + (0.23205 * &#39;Carne de boi de primeira&#39;) + (0.09955 * &#39;Carne de boi de segunda&#39;) + (0.22819 * &#39;Carne de suíno&#39;) + (0.22463 * &#39;Carnes e peixes industrializados&#39;) + (0.14368 * &#39;Pescados frescos&#39;) + (0.08625 * &#39;Outros&#39;) + (-0.02797 * &#39;Aves e ovos&#39;) + (-0.08676 * &#39;Frango&#39;) + (0.07755 * &#39;Ovo de galinha&#39;) + (0.06549 * &#39;Orgânicos&#39;) + (0.22772 * &#39;Outros&#39;) + (0.08580 * &#39;Leites e derivados&#39;) + (0.17204 * &#39;Leite de vaca&#39;) + (0.19004 * &#39;Leite em pó&#39;) + (0.05192 * &#39;Queijos&#39;) + (0.23205 * &#39;Light e diet&#39;) + (0.09955 * &#39;Orgânicos&#39;) + (0.22819 * &#39;Outros&#39;) + (0.22463 * &#39;Panificados&#39;) + (0.61345 * &#39;Pão francês&#39;) + (0.18520 * &#39;Biscoito&#39;) + (0.03419 * &#39;Light e diet&#39;) + (0.20366 * &#39;Outros panificados&#39;) + (0.22772 * &#39;Óleos e gorduras&#39;) + (0.08580 * &#39;Óleo de soja&#39;) + (0.17204 * &#39;Azeite de oliva&#39;) + (0.19004 * &#39;Outros&#39;) + (0.05192 * &#39;Bebidas e infusões&#39;) + (0.23205 * &#39;Café moído&#39;) + (0.09955 * &#39;Refrigerantes&#39;) + (0.22819 * &#39;Bebidas não alcoólicas light e diet&#39;) + (0.22463 * &#39;Cervejas e chopes&#39;) + (1.21094 * &#39;Outras bebidas alcoólicas&#39;) + (0.19594 * &#39;Outras&#39;) + (0.22943 * &#39;Enlatados e conservas&#39;) + (0.08773 * &#39;Sal e condimentos&#39;) + (0.69795 * &#39;Massa de tomate&#39;) + (1.73466 * &#39;Maionese&#39;) + (0.12250 * &#39;Sal refinado&#39;) + (0.61328 * &#39;Outros&#39;) + (0.06133 * &#39;Alimentos preparados&#39;) + (0.34013 * &#39;Outros alimentos&#39;) + (0.54600 * &#39;Alimentação fora do domicílio&#39;) + (0.22772 * &#39;Almoço e jantar&#39;) + (0.08580 * &#39;Café, leite, café/leite e chocolate&#39;) + (0.17204 * &#39;Sanduíches e salgados&#39;) + (0.19004 * &#39;Refrigerantes e outras bebidas não alcoólicas&#39;) + (0.05192 * &#39;Lanches&#39;) + (0.23205 * &#39;Cervejas, chopes e outras bebidas alcoólicas&#39;) + (0.09955 * &#39;Alimentação light e diet&#39;) + (0.22819 * &#39;Outras&#39;) + (0.22463 * &#39;Tamanho médio da família&#39;)
+
+Coeficiente de determinação é: 1.00000, ou seja, 0.00000% do &#39;valor-mensal&#39; não é explicada pelos atributos utilizados
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Mais-de-14310-a-23850">Mais de 14310 a 23850<a class="anchor-link" href="#Mais-de-14310-a-23850">&#182;</a></h3>
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_despesas</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">regressao_linear_classes_sociais</span><span class="p">(</span><span class="n">df_estados_brasil</span><span class="p">,</span> <span class="n">classes_sociais</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -16956,471 +17201,51 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[14]:</div>
+    <div class="prompt"></div>
 
 
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Coeficiente estimado: [ 0.50431409  0.3637596   0.02295893 -0.15312258 -0.00550576  0.0932568
+  0.2578368   0.12157352  0.12301437  0.04712972  0.11998703  0.03314128
+  0.1947924   0.15606072  1.01166282  0.21555638  0.12464651  0.29290546
+  0.37829097  0.05796769  0.07169487  1.06780944  0.5616547   0.28677714
+ -0.03854126  0.0932568   0.2578368   0.12157352  0.12301437  0.04712972
+  0.11998703  0.03314128  0.1947924   0.15606072  0.90631613  0.1094527
+  0.38921969  0.28570218 -0.19565368  0.139719    0.0932568   0.2578368
+  0.12157352  0.12301437  0.04712972  0.11998703  0.03314128  0.1947924
+  0.15606072  1.36157687  0.99445063  0.18004054  0.06475234  0.0932568
+  0.2578368   0.12157352  0.12301437  0.04712972  0.11998703  0.03314128
+  0.1947924   0.15606072  1.30018579  0.55704884 -0.03235079  0.26300311
+  0.51247354  1.59456339  0.66611238  0.52989996  0.21909969  0.30582586
+ -0.17413391  0.0932568   0.2578368   0.12157352  0.12301437  0.04712972
+  0.11998703  0.03314128  0.1947924   0.15606072  1.46040938  0.34040865
+  1.15325045  0.02295893 -0.15312258 -0.00550576  0.0932568   0.2578368
+  0.12157352  0.12301437  0.04712972  0.11998703  0.03314128  0.1947924
+  0.15606072  1.56520318  0.6052943   0.61621045  0.51101157  0.28570218
+ -0.19565368  0.139719    0.02295893 -0.15312258 -0.00550576  0.0932568
+  0.2578368   0.12157352  0.12301437  0.04712972  0.11998703  0.03314128
+  0.1947924   0.15606072  1.18177289 -0.31504693  0.61339053  0.28570218
+ -0.19565368  0.139719    0.74330958  0.81458795  0.64721717 -0.02586001
+  0.0932568   0.2578368   0.12157352  0.12301437  0.04712972  0.11998703
+  0.03314128  0.1947924   0.15606072  1.5673498  -0.12565953  0.69033825
+  0.20350858  0.7241121   0.01583594  0.37829097  0.05796769  0.07169487
+  0.5675186   0.89300198  0.3068461   0.42329641  0.00730143  0.0932568
+  0.2578368   0.12157352  0.12301437  0.04712972  0.11998703  0.03314128
+  0.1947924   0.15606072  0.71695865  1.05337219  1.80031019  0.16789111
+  0.30810245  0.25562676 -0.07482554  0.64577533  0.27209826  0.15322774
+  0.37829097  0.05796769  0.07169487  0.01054226]
 
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+R2 (score): 1.0
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+Intercept: 77.29013
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Tipos de despesa, número e tamanho médio das famílias</th>
-      <th>Até 1908 (2)</th>
-      <th>Mais de 1908 a 2862</th>
-      <th>Mais de 2862 a 5724</th>
-      <th>Mais de 5724 a 9540</th>
-      <th>Mais de 9540 a 14310</th>
-      <th>Mais de 14310 a 23850</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Alimentação</td>
-      <td>0.10</td>
-      <td>0.09</td>
-      <td>0.07</td>
-      <td>0.06</td>
-      <td>0.05</td>
-      <td>0.04</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Habitação</td>
-      <td>0.17</td>
-      <td>0.15</td>
-      <td>0.12</td>
-      <td>0.12</td>
-      <td>0.11</td>
-      <td>0.10</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Aluguel</td>
-      <td>0.09</td>
-      <td>0.08</td>
-      <td>0.06</td>
-      <td>0.06</td>
-      <td>0.05</td>
-      <td>0.04</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>90</th>
-      <td>Número de famílias</td>
-      <td>1478894.00</td>
-      <td>2470800.00</td>
-      <td>1092145.00</td>
-      <td>384637.00</td>
-      <td>207088.00</td>
-      <td>123662.00</td>
-    </tr>
-    <tr>
-      <th>91</th>
-      <td>Tamanho médio da família</td>
-      <td>2.69</td>
-      <td>3.13</td>
-      <td>3.48</td>
-      <td>3.11</td>
-      <td>2.93</td>
-      <td>3.02</td>
-    </tr>
-    <tr>
-      <th>92</th>
-      <td>Total gasto por classes</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-  </tbody>
-</table>
-<p>93 rows × 7 columns</p>
-</div>
-</div>
+Equação do &#39;valor-mensal&#39; em termos de todos os atributos analisados:
 
-</div>
+  f(x) = 77.29013 + (0.50431 * &#39;Arroz&#39;) + (0.36376 * &#39;Feijão&#39;) + (0.02296 * &#39;Orgânicos&#39;) + (-0.15312 * &#39;Outros&#39;) + (-0.00551 * &#39;Farinhas, féculas e massas&#39;) + (0.09326 * &#39;Macarrão&#39;) + (0.25784 * &#39;Farinha de trigo&#39;) + (0.12157 * &#39;Farinha de mandioca&#39;) + (0.12301 * &#39;Outras&#39;) + (0.04713 * &#39;Tubérculos e raízes&#39;) + (0.11999 * &#39;Batata inglesa&#39;) + (0.03314 * &#39;Cenoura&#39;) + (0.19479 * &#39;Mandioca&#39;) + (0.15606 * &#39;Outros&#39;) + (1.01166 * &#39;Açúcares e derivados&#39;) + (0.21556 * &#39;Açúcar refinado&#39;) + (0.12465 * &#39;Açúcar cristal&#39;) + (0.29291 * &#39;Light e diet&#39;) + (0.37829 * &#39;Outros&#39;) + (0.05797 * &#39;Legumes e verduras&#39;) + (0.07169 * &#39;Tomate&#39;) + (1.06781 * &#39;Cebola&#39;) + (0.56165 * &#39;Alface&#39;) + (0.28678 * &#39;Outros&#39;) + (-0.03854 * &#39;Frutas&#39;) + (0.09326 * &#39;Banana&#39;) + (0.25784 * &#39;Laranja&#39;) + (0.12157 * &#39;Maçã&#39;) + (0.12301 * &#39;Outras frutas&#39;) + (0.04713 * &#39;Carnes, vísceras e pescados&#39;) + (0.11999 * &#39;Carne de boi de primeira&#39;) + (0.03314 * &#39;Carne de boi de segunda&#39;) + (0.19479 * &#39;Carne de suíno&#39;) + (0.15606 * &#39;Carnes e peixes industrializados&#39;) + (0.90632 * &#39;Pescados frescos&#39;) + (0.10945 * &#39;Outros&#39;) + (0.38922 * &#39;Aves e ovos&#39;) + (0.28570 * &#39;Frango&#39;) + (-0.19565 * &#39;Ovo de galinha&#39;) + (0.13972 * &#39;Orgânicos&#39;) + (0.09326 * &#39;Outros&#39;) + (0.25784 * &#39;Leites e derivados&#39;) + (0.12157 * &#39;Leite de vaca&#39;) + (0.12301 * &#39;Leite em pó&#39;) + (0.04713 * &#39;Queijos&#39;) + (0.11999 * &#39;Light e diet&#39;) + (0.03314 * &#39;Orgânicos&#39;) + (0.19479 * &#39;Outros&#39;) + (0.15606 * &#39;Panificados&#39;) + (1.36158 * &#39;Pão francês&#39;) + (0.99445 * &#39;Biscoito&#39;) + (0.18004 * &#39;Light e diet&#39;) + (0.06475 * &#39;Outros panificados&#39;) + (0.09326 * &#39;Óleos e gorduras&#39;) + (0.25784 * &#39;Óleo de soja&#39;) + (0.12157 * &#39;Azeite de oliva&#39;) + (0.12301 * &#39;Outros&#39;) + (0.04713 * &#39;Bebidas e infusões&#39;) + (0.11999 * &#39;Café moído&#39;) + (0.03314 * &#39;Refrigerantes&#39;) + (0.19479 * &#39;Bebidas não alcoólicas light e diet&#39;) + (0.15606 * &#39;Cervejas e chopes&#39;) + (1.30019 * &#39;Outras bebidas alcoólicas&#39;) + (0.55705 * &#39;Outras&#39;) + (-0.03235 * &#39;Enlatados e conservas&#39;) + (0.26300 * &#39;Sal e condimentos&#39;) + (0.51247 * &#39;Massa de tomate&#39;) + (1.59456 * &#39;Maionese&#39;) + (0.66611 * &#39;Sal refinado&#39;) + (0.52990 * &#39;Outros&#39;) + (0.21910 * &#39;Alimentos preparados&#39;) + (0.30583 * &#39;Outros alimentos&#39;) + (-0.17413 * &#39;Alimentação fora do domicílio&#39;) + (0.09326 * &#39;Almoço e jantar&#39;) + (0.25784 * &#39;Café, leite, café/leite e chocolate&#39;) + (0.12157 * &#39;Sanduíches e salgados&#39;) + (0.12301 * &#39;Refrigerantes e outras bebidas não alcoólicas&#39;) + (0.04713 * &#39;Lanches&#39;) + (0.11999 * &#39;Cervejas, chopes e outras bebidas alcoólicas&#39;) + (0.03314 * &#39;Alimentação light e diet&#39;) + (0.19479 * &#39;Outras&#39;) + (0.15606 * &#39;Tamanho médio da família&#39;)
 
+Coeficiente de determinação é: 1.00000, ou seja, 0.00000% do &#39;valor-mensal&#39; não é explicada pelos atributos utilizados
+</pre>
 </div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Convertendo-linhas-do-DF-para-colunas">Convertendo linhas do DF para colunas<a class="anchor-link" href="#Convertendo-linhas-do-DF-para-colunas">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Inverter-o-DF,-linha-vira-coluna,-coluna-vira-linha.">Inverter o DF, linha vira coluna, coluna vira linha.<a class="anchor-link" href="#Inverter-o-DF,-linha-vira-coluna,-coluna-vira-linha.">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_invertido</span> <span class="o">=</span> <span class="n">df_despesas</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Setando-as-colunas-como-a-primeira-linha-do-DF">Setando as colunas como a primeira linha do DF<a class="anchor-link" href="#Setando-as-colunas-como-a-primeira-linha-do-DF">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_invertido</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df_invertido</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Removendo-a-primeira-linha-que-foi-utilizada-para-ser-as-colunas-do-DF.">Removendo a primeira linha que foi utilizada para ser as colunas do DF.<a class="anchor-link" href="#Removendo-a-primeira-linha-que-foi-utilizada-para-ser-as-colunas-do-DF.">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_invertido</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">&quot;Tipos de despesa, número e tamanho médio das famílias&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Definindo-o-&#237;ndice-gerado-automaticamente-como-coluna-de-&quot;Classe-social&quot;">Definindo o &#237;ndice gerado automaticamente como coluna de "Classe social"<a class="anchor-link" href="#Definindo-o-&#237;ndice-gerado-automaticamente-como-coluna-de-&quot;Classe-social&quot;">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_invertido</span><span class="p">[</span><span class="s1">&#39;Classe social&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_invertido</span><span class="o">.</span><span class="n">index</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Resetando-o-&#237;ndice-do-DF-para-num&#233;rico.">Resetando o &#237;ndice do DF para num&#233;rico.<a class="anchor-link" href="#Resetando-o-&#237;ndice-do-DF-para-num&#233;rico.">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_invertido</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">df_invertido</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Remover-coluna-&quot;N&#250;mero-de-fam&#237;lias&quot;-que-n&#227;o-contribui-para-a-an&#225;lise.">Remover coluna "N&#250;mero de fam&#237;lias" que n&#227;o contribui para a an&#225;lise.<a class="anchor-link" href="#Remover-coluna-&quot;N&#250;mero-de-fam&#237;lias&quot;-que-n&#227;o-contribui-para-a-an&#225;lise.">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_invertido</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Número de famílias&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="DF-convertido">DF convertido<a class="anchor-link" href="#DF-convertido">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_invertido</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[21]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Alimentação</th>
-      <th>Habitação</th>
-      <th>Aluguel</th>
-      <th>Aluguel monetário</th>
-      <th>Aluguel não monetário</th>
-      <th>Condomínio</th>
-      <th>Serviços e taxas</th>
-      <th>Energia elétrica</th>
-      <th>Telefone fixo</th>
-      <th>Telefone Celular</th>
-      <th>...</th>
-      <th>Aumento do ativo</th>
-      <th>Imóvel (aquisição)</th>
-      <th>Imóvel (reforma)</th>
-      <th>Outros investimentos</th>
-      <th>Diminuição do passivo</th>
-      <th>Empréstimo</th>
-      <th>Prestação de imóvel</th>
-      <th>Tamanho médio da família</th>
-      <th>Total gasto por classes</th>
-      <th>Classe social</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>0.10</td>
-      <td>0.17</td>
-      <td>0.09</td>
-      <td>0.02</td>
-      <td>0.07</td>
-      <td>0.00</td>
-      <td>0.05</td>
-      <td>0.02</td>
-      <td>0.00</td>
-      <td>0.01</td>
-      <td>...</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>0.01</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>2.69</td>
-      <td>1</td>
-      <td>Até 1908 (2)</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0.09</td>
-      <td>0.15</td>
-      <td>0.08</td>
-      <td>0.01</td>
-      <td>0.07</td>
-      <td>0.00</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>0.01</td>
-      <td>...</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>0.01</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>3.13</td>
-      <td>1</td>
-      <td>Mais de 1908 a 2862</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0.07</td>
-      <td>0.12</td>
-      <td>0.06</td>
-      <td>0.01</td>
-      <td>0.05</td>
-      <td>0.00</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>0.01</td>
-      <td>...</td>
-      <td>0.02</td>
-      <td>0.01</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>0.02</td>
-      <td>0.01</td>
-      <td>0.01</td>
-      <td>3.48</td>
-      <td>1</td>
-      <td>Mais de 2862 a 5724</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>0.06</td>
-      <td>0.12</td>
-      <td>0.06</td>
-      <td>0.01</td>
-      <td>0.05</td>
-      <td>0.00</td>
-      <td>0.03</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>0.01</td>
-      <td>...</td>
-      <td>0.02</td>
-      <td>0.01</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>0.02</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>3.11</td>
-      <td>1</td>
-      <td>Mais de 5724 a 9540</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>0.05</td>
-      <td>0.11</td>
-      <td>0.05</td>
-      <td>0.01</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.02</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>0.00</td>
-      <td>...</td>
-      <td>0.02</td>
-      <td>0.01</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>0.02</td>
-      <td>0.01</td>
-      <td>0.01</td>
-      <td>2.93</td>
-      <td>1</td>
-      <td>Mais de 9540 a 14310</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>0.04</td>
-      <td>0.10</td>
-      <td>0.04</td>
-      <td>0.00</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.02</td>
-      <td>0.00</td>
-      <td>0.00</td>
-      <td>0.00</td>
-      <td>...</td>
-      <td>0.05</td>
-      <td>0.04</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>0.01</td>
-      <td>0.00</td>
-      <td>0.01</td>
-      <td>3.02</td>
-      <td>1</td>
-      <td>Mais de 14310 a 23850</td>
-    </tr>
-  </tbody>
-</table>
-<p>6 rows × 93 columns</p>
-</div>
-</div>
-
 </div>
 
 </div>
